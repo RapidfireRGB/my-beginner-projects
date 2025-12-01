@@ -7,7 +7,8 @@
 FILETIME ftCreate;
 FILETIME ftAccess;
 FILETIME ftWrite;
-SYSTEMTIME stUTC, stLocal;
+FILETIME ftLastWriteTime;
+SYSTEMTIME stUTC, stLocal, stLocalTime;
 
 time_t get_created_at(const std::filesystem::path &file_path) {
     HANDLE hFile = CreateFileW(file_path.c_str(),
@@ -20,7 +21,10 @@ time_t get_created_at(const std::filesystem::path &file_path) {
 
     //Revisit this part of the function.
     if (exists(file_path)) {
-        const time_t created_at = !GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite);
+        const time_t created_at = !GetFileTime(hFile,
+            &ftCreate,
+            &ftAccess,
+            &ftWrite);
 
         FileTimeToSystemTime(&ftWrite, &stUTC);
         SystemTimeToTzSpecificLocalTime(nullptr, &stUTC, &stLocal);
@@ -28,27 +32,55 @@ time_t get_created_at(const std::filesystem::path &file_path) {
         //TODO try to turn this block into return statement
         std::cout << "Created on: " << "\n" << "Year: " << stLocal.wYear << "\n"
         << "Month: "<< stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
-        << "Hour: " << stLocal.wHour << "\n" << "Minute: " << stLocal.wMinute << "\n"
-        << "Second: " << stLocal.wSecond;
+        << "Hour: " << stLocal.wHour << "\n" << "Minutes: " << stLocal.wMinute << "\n"
+        << "Seconds: " << stLocal.wSecond << "\n";
 
 
         return created_at;
     } else {
         //Error handle here.
-        return -1;
+        std::cerr << "File does not exist or was not found. Make sure you paste the "
+                     "path and file name correctly without quotation marks." << "\n";
     }
 }
 
-time_t get_modified_at(std::filesystem::path file_path) {
-    //Fetch timestamp for any changes saved to file. Should return time data.
-    //HANDLE hFile = CreateFileW(file_path.c_str(),
-        //);
+time_t get_modified_at(const std::filesystem::path &file_path) {
+    //Fetch timestamp for last change saved to file. Should return time data.
+    HANDLE hFile = CreateFileW(file_path.c_str(),
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        nullptr,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        nullptr);
 
+    FileTimeToSystemTime(&ftLastWriteTime, &stLocalTime);
+    if (!exists(file_path)) {
+        //Handle error here.
+        return -1;
+    }
+
+    std::cout << "Last Modified at: " << "\n" << "Year: " << stLocal.wYear << "\n"
+        << "Month: "<< stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
+        << "Hour: " << stLocal.wHour << "\n" << "Minutes: " << stLocal.wMinute << "\n"
+        << "Seconds: " << stLocal.wSecond << "\n";
 
 }
 
-size_t get_file_size(std::filesystem::path file_path) {
+long long get_file_size(const std::filesystem::path &file_path) {
     //When File is saved, get new file size.
+    HANDLE hFile = CreateFileW(file_path.c_str(),
+        GENERIC_READ,
+        FILE_SHARE_READ | FILE_SHARE_WRITE,
+        nullptr,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        nullptr);
+
+    LARGE_INTEGER file_size;
+    CloseHandle(hFile);
+    return file_size.QuadPart;
+
 }
 
 size_t get_size_change(std::filesystem::path file_path) {
@@ -62,6 +94,9 @@ int main() {
     std::cin >> full_dir;
 
     get_created_at(full_dir);
+    get_modified_at(full_dir);
+    std::cout << "The size is: " << get_file_size(full_dir);
+
 
     //Output creation timestamp, edit timestamp, file size, and file size change
     //Export to a .txt
