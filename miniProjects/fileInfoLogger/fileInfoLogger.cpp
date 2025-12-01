@@ -31,10 +31,10 @@ time_t get_created_at(const std::filesystem::path &file_path) {
     CloseHandle(hFile);
 
     //TODO move this to main.
-    std::cout << "Created on: " << "\n" << "Year: " << stLocal.wYear << "\n"
-    << "Month: "<< stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
+    std::cout << "Created on:\n" << "Year: " << stLocal.wYear << "\n"
+    << "Month: " << stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
     << "Hour: " << stLocal.wHour << "\n" << "Minutes: " << stLocal.wMinute << "\n"
-    << "Seconds: " << stLocal.wSecond << "\n";
+    << "Seconds: " << stLocal.wSecond << "\n\n";
 
     // conversion to time_t
     tm created_at{};
@@ -68,10 +68,10 @@ time_t get_modified_at(const std::filesystem::path &file_path) {
     CloseHandle(hFile);
 
     // TODO move this to main.
-    std::cout << "Last Modified at: " << "\n" << "Year: " << stLocal.wYear << "\n"
-        << "Month: "<< stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
+    std::cout << "Last Modified at:\n" << "Year: " << stLocal.wYear << "\n"
+        << "Month: " << stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
         << "Hour: " << stLocal.wHour << "\n" << "Minutes: " << stLocal.wMinute << "\n"
-        << "Seconds: " << stLocal.wSecond << "\n";
+        << "Seconds: " << stLocal.wSecond << "\n\n";
 
     // conversion to time_t
     tm last_edit{};
@@ -96,7 +96,12 @@ long long get_file_size(const std::filesystem::path &file_path) {
         nullptr);
 
     LARGE_INTEGER file_size;
+
+    if (hFile == INVALID_HANDLE_VALUE || !GetFileSizeEx(hFile, &file_size)) {
+        return -1;
+    }
     CloseHandle(hFile);
+
     return file_size.QuadPart;
 
 }
@@ -108,13 +113,12 @@ size_t get_size_change(std::filesystem::path file_path) {
 int main() {
 
     std::string full_dir;
-    std::cout << "Paste the full path of a file you wish to log: " << "\n";
+    std::cout << "Paste the full path of a file you wish to log:\n";
     std::cin >> full_dir;
 
     get_created_at(full_dir);
     get_modified_at(full_dir);
-    std::cout << "The size is: " << get_file_size(full_dir);
-
+    std::cout << "File Size: " << get_file_size(full_dir) << " Bytes\n";
 
     //Output creation timestamp, edit timestamp, file size, and file size change
     //Export to a .txt
