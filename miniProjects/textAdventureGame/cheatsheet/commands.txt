@@ -1,5 +1,6 @@
 Note: You can interact with most objects by typing the name of the object. For example, type 'torch' at spawn to pick up the torch.
 
+---------------Commands available anywhere--------------------------------------:
 north, south, east, west: Basic movement commands.
 
 info, information, health: Prints Player health, inventory, and coordinate position.
@@ -10,11 +11,18 @@ potion, drink potion, use potion: If you have a potion, drink it.
 
 use scroll, use teleportation scroll, scroll, teleport, tp, use tp: If you have a Teleportation Scroll, use it.
 
+
+----------------Commands only available in certain rooms--------------------------:
 take potion, pick up potion: Takes a potion from the room and adds it to your inventory.
 
 take teleportation scroll, pick up teleportation scroll: Takes a Teleportation Scroll from the room and adds it to your inventory.
 
 take, pick up: General pick up that works on most items
+
+pick up, staff, aged wooden staff: If you are in the Oil Rig room, adds the staff to your inventory.
+
+talk, speak, hi: Initial interaction prompt with the NPC 1 tile south of spawn.
+  - yes, staff, give staff: After initial interaction, remove the staff from your inventory and get a full heal.
 
 avoid, ignore: If you get a Mimic encounter, type this to not take damage.
 
@@ -52,6 +60,8 @@ ladder, use ladder, place ladder: If you are in the room with Key#3, place the l
 
 door, unlock, keys, use key, use keys: If you are at the Final Door and have all three keys, type this to get the Standard Ending.
 
-There are a couple more relevant commands if you find the secret. But if I tell you, it wouldn't be a secret.
 
-poop: You will get the Poop Ending. But why would you do that?
+
+There are a couple more relevant commands if you find the secret. But if I tell you, it wouldn't be a secret. I will give you only one of them.
+
+poop: You will get the Poop Ending. But why would you want that?
