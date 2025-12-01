@@ -1,0 +1,57 @@
+Note: You can interact with most objects by typing the name of the object. For example, type 'torch' at spawn to pick up the torch.
+
+north, south, east, west: Basic movement commands.
+
+info, information, health: Prints Player health, inventory, and coordinate position.
+
+quit, exit: Quit the game. 
+
+potion, drink potion, use potion: If you have a potion, drink it.
+
+use scroll, use teleportation scroll, scroll, teleport, tp, use tp: If you have a Teleportation Scroll, use it.
+
+take potion, pick up potion: Takes a potion from the room and adds it to your inventory.
+
+take teleportation scroll, pick up teleportation scroll: Takes a Teleportation Scroll from the room and adds it to your inventory.
+
+take, pick up: General pick up that works on most items
+
+avoid, ignore: If you get a Mimic encounter, type this to not take damage.
+
+dodge, avoid: If you get a Swinging Axes encounter, type this to not take damage.
+
+disarm, avoid, ignore: If you get a Bear Trap encounter, type this to not take damage.
+
+mirror, look, inspect: If you get a Mirror encounter, type this for a free item duplication.
+
+sofa: Sofas the Sofa if you encounter a Sofa.
+
+chest, open, open chest: If you encounter a Chest, type this to interact with it.
+
+run, dodge, avoid: Type this to run from a Ghost encounter. Spooky.
+
+run, dodge, avoid: Type this to run from a Slime encounter.
+
+talk, speak, treasure hunter: Type this if you find a Treasure Hunter. They might have something important to share.
+
+read, inspect, wall, squint: Reveals the Trivia Room question.
+
+1, 2, 3: Input your answer to the Trivia question. You will get 1 of 3 random questions.
+  - The answers for each possible question are as follows:
+    - 212
+    - 'E Pluribus Unum'
+    - Two-Handed
+
+pick up, key, yes, compartment: Adds the Key#1 to your inventory if you have completed the Trivia room.
+
+torch, use torch, light: If you took the torch, illuminates the room containing Key#2 and adds it to your inventory.
+
+ladder, pick up, take: If you are in the Ladder room, adds it to your inventory.
+
+ladder, use ladder, place ladder: If you are in the room with Key#3, place the ladder and add the key to your inventory.
+
+door, unlock, keys, use key, use keys: If you are at the Final Door and have all three keys, type this to get the Standard Ending.
+
+There are a couple more relevant commands if you find the secret. But if I tell you, it wouldn't be a secret.
+
+poop: You will get the Poop Ending. But why would you do that?
