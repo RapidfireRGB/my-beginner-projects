@@ -534,7 +534,7 @@ def secret_boss_room(Player, gridmap, command):
     else:
         pass
 
-
+# Peep the horror.
 #Defining the rooms individually and assigning appropriate lists, including functions.
 gridmap[0][0]["Valid"] = False
 gridmap[0][0]["Action"] = secret_boss_room
