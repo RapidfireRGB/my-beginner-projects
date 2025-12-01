@@ -1,5 +1,4 @@
 import random
-import sys
 
 # Defining list variables; used as password criteria later.
 alph_lowerc = list('qwertyuiopasdfghjklzxcvbnm')
@@ -15,11 +14,15 @@ def user_prompts():
     user_pass_length = int(input('Specify Password Length (4-24).'))
 
     # Password length validation
-    if user_pass_length < 4 or user_pass_length > 24:
-        print('Please run the code again and enter a whole number between 4 and 24.')
-        sys.exit()
-    else:
-        pass
+    try:
+        if user_pass_length < 4 or user_pass_length > 24:
+            print('Invalid Password Length. Try again.')
+            user_prompts()
+        else:
+            pass
+    except TypeError:
+        print('Invalid data type for Password Length. Try again.')
+        user_prompts()
 
     num_only = str(input('Do you want to generate a PIN? (y/n, activates numbers-only mode.)'))
 
