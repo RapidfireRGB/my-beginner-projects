@@ -37,8 +37,10 @@ void get_created_at(const std::filesystem::path &file_path) {
 
     //TODO move this to main.
     std::cout << "Created on:\n"
-    << created_at.tm_mon <<"/"<< created_at.tm_mday <<"/"<< created_at.tm_year << "\n"
+    << created_at.tm_mon + 1 <<"/"<< created_at.tm_mday <<"/"<< created_at.tm_year - 100 << "\n"
     << created_at.tm_hour <<":"<< created_at.tm_min <<":"<< created_at.tm_sec << "\n\n";
+
+    //return created_at;
 }
 
 void get_modified_at(const std::filesystem::path &file_path) {
@@ -69,8 +71,10 @@ void get_modified_at(const std::filesystem::path &file_path) {
 
     // TODO move this to main.
     std::cout << "Last Modified at:\n"
-    << last_edit.tm_mon <<"/"<< last_edit.tm_mday <<"/"<< last_edit.tm_year<< "\n"
+    << last_edit.tm_mon + 1 <<"/"<< last_edit.tm_mday <<"/"<< last_edit.tm_year - 100<< "\n"
     << last_edit.tm_hour <<":"<< last_edit.tm_min <<":"<< last_edit.tm_sec << "\n\n";
+
+    //return last_edit
 
 }
 
