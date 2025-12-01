@@ -3,30 +3,38 @@ import random
 
 materials = ['Iron', 'Copper', 'Steel', 'Titanium']
 items = ['Sword', 'Dagger', 'Bow', 'Tome']
-loot_pool = [] #Empty list to append in the loop.
+loot_pool = [] #Empty list to be appended in the loop.
 
+#Nested For loop to generate a list of ordered pairs ('Iron' and 'Sword' becomes 'Iron Sword' etc)
 for material in materials:
     for item in items:
-        loot_pool.append(f'{material} {item}') #Nested For loop to generate a list of ordered pairs (Iron Sword, Iron Dagger, etc)
+        loot_pool.append(f'{material} {item}') 
 
-drop_rate = [4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1] #The weights for random.choices; a drop rate multiplier for corresponding list items.
-random_loot = random.choices(loot_pool, weights = drop_rate, k=1)[0] #The randomly generated item.
+#Defining the weights for random.choices; a rate multiplier for list items at specific index positions.
+drop_rate = [4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1]
+
+#The randomly generated item.
+random_loot = random.choices(loot_pool, weights = drop_rate, k=1)[0] 
 
 print(f"You found {random_loot} x1!")
 
 if random.randint(1, 5) == 5: #20% chance for a bonus item.
 
-    new_lootpool = loot_pool.copy() #Copies the list and weights to eliminate "duplicates" from the list.
+    #Copies the list and weights to eliminate "duplicates" from the list.
+    new_lootpool = loot_pool.copy() 
     new_weights = drop_rate.copy()
-    
-    elim_loot = new_lootpool.index(random_loot) #Eliminates the random_loot item from the list.
+
+    #Eliminates the random_loot item from the list.
+    elim_loot = new_lootpool.index(random_loot) 
     new_lootpool.pop(elim_loot)
     new_weights.pop(elim_loot)
-    
-    bonus_loot = random.choices(new_lootpool, weights = new_weights, k=1)[0] #Generates the bonus item.
+
+    #Generates the bonus item.
+    bonus_loot = random.choices(new_lootpool, weights = new_weights, k=1)[0] 
     print(f"You also found {bonus_loot} x1!") 
-    
-    if 'random_loot' in locals() and 'Titanium' in random_loot: #Prints some flavor text if you get Titanium.
+
+    #Prints some flavor text if you get a Titanium item.
+    if 'random_loot' in locals() and 'Titanium' in random_loot: 
         print('Congratulations, you got a Rare Item!')
     elif 'bonus_loot' in locals() and 'Titanium' in bonus_loot:
         print('Congratulations, you got a Rare Item!')
