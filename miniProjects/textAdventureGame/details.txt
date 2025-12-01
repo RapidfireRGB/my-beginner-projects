@@ -1,4 +1,5 @@
 A basic text terminal game made in Python. The primary goal is to collect 3 keys which are locked behind various simple puzzles. Or you can play around and find all the alternate endings.
+This project was a lot of fun. Figuring out how to implement ideas as I was coming up with them turned out to be a nice challenge.
 
 I have also included a spreadsheet from when I drafted the room layout and .png of the map in the 'cheatsheet' folder in case you get lost.
 
