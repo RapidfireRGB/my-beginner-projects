@@ -1,6 +1,9 @@
+A typical password generator project using string manipulation. I learned a lot about scope just from the one inner function in this script.
+
 > What It Does:
   - Defines each element of the password  (numbers, special characters, etc) as separate lists 
   - Prompts user for desired password length and password elements
+  - Also, prompts for PIN-only option which enables only numbers to be generated
   - Prints resulting string to the console.
 
 > How to Use It:
