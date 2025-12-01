@@ -4,12 +4,10 @@
 //#include <ctime>
 //#include <cmath>
 
-FILETIME ftCreate;
-FILETIME ftAccess;
-FILETIME ftWrite;
+FILETIME ftCreate, ftAccess, ftWrite;
 SYSTEMTIME stUTC, stLocal, stLocalTime;
 
-time_t get_created_at(const std::filesystem::path &file_path) {
+void get_created_at(const std::filesystem::path &file_path) {
     HANDLE hFile = CreateFileW(file_path.c_str(),
                                GENERIC_READ,
                                FILE_SHARE_READ,
@@ -18,25 +16,17 @@ time_t get_created_at(const std::filesystem::path &file_path) {
                                FILE_ATTRIBUTE_NORMAL,
                                nullptr);
 
-    //Revisit this part of the function.
     if (!GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite) || !exists(file_path)) {
         //Error handle here.
         std::cerr << "File does not exist or was not found. Make sure you paste the "
                      "path and file name correctly without quotation marks." << "\n";
-        return -1;
     }
 
     FileTimeToSystemTime(&ftCreate, &stUTC);
     SystemTimeToTzSpecificLocalTime(nullptr, &stUTC, &stLocal);
     CloseHandle(hFile);
 
-    //TODO move this to main.
-    std::cout << "Created on:\n" << "Year: " << stLocal.wYear << "\n"
-    << "Month: " << stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
-    << "Hour: " << stLocal.wHour << "\n" << "Minutes: " << stLocal.wMinute << "\n"
-    << "Seconds: " << stLocal.wSecond << "\n\n";
-
-    // conversion to time_t
+    // defining tm struct created_at so time names make sense below.
     tm created_at{};
     created_at.tm_year = stLocal.wYear - 1900;
     created_at.tm_mon = stLocal.wMonth - 1;
@@ -45,11 +35,13 @@ time_t get_created_at(const std::filesystem::path &file_path) {
     created_at.tm_min = stLocal.wMinute;
     created_at.tm_sec = stLocal.wSecond;
 
-    return mktime(&created_at);
+    //TODO move this to main.
+    std::cout << "Created on:\n"
+    << created_at.tm_mon <<"/"<< created_at.tm_mday <<"/"<< created_at.tm_year << "\n"
+    << created_at.tm_hour <<":"<< created_at.tm_min <<":"<< created_at.tm_sec << "\n\n";
 }
 
-time_t get_modified_at(const std::filesystem::path &file_path) {
-    //Fetch timestamp for last change saved to file. Should return time data.
+void get_modified_at(const std::filesystem::path &file_path) {
     HANDLE hFile = CreateFileW(file_path.c_str(),
         GENERIC_READ,
         FILE_SHARE_READ,
@@ -59,21 +51,14 @@ time_t get_modified_at(const std::filesystem::path &file_path) {
         nullptr);
 
     if (!GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite) || !exists(file_path)) {
-        //Handle error here.
-        return -1;
+        std::cerr << " ";
     }
 
     FileTimeToSystemTime(&ftWrite, &stUTC);
     SystemTimeToTzSpecificLocalTime(nullptr, &stUTC, &stLocal);
     CloseHandle(hFile);
 
-    // TODO move this to main.
-    std::cout << "Last Modified at:\n" << "Year: " << stLocal.wYear << "\n"
-        << "Month: " << stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
-        << "Hour: " << stLocal.wHour << "\n" << "Minutes: " << stLocal.wMinute << "\n"
-        << "Seconds: " << stLocal.wSecond << "\n\n";
-
-    // conversion to time_t
+    // defining tm struct created_at so time names make sense below.
     tm last_edit{};
     last_edit.tm_year = stLocal.wYear - 1900;
     last_edit.tm_mon = stLocal.wMonth - 1;
@@ -82,11 +67,14 @@ time_t get_modified_at(const std::filesystem::path &file_path) {
     last_edit.tm_min = stLocal.wMinute;
     last_edit.tm_sec = stLocal.wSecond;
 
-    return mktime(&last_edit);
+    // TODO move this to main.
+    std::cout << "Last Modified at:\n"
+    << last_edit.tm_mon <<"/"<< last_edit.tm_mday <<"/"<< last_edit.tm_year<< "\n"
+    << last_edit.tm_hour <<":"<< last_edit.tm_min <<":"<< last_edit.tm_sec << "\n\n";
+
 }
 
 long long get_file_size(const std::filesystem::path &file_path) {
-    //When File is saved, get new file size.
     HANDLE hFile = CreateFileW(file_path.c_str(),
         GENERIC_READ,
         FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -96,7 +84,6 @@ long long get_file_size(const std::filesystem::path &file_path) {
         nullptr);
 
     LARGE_INTEGER file_size;
-
     if (hFile == INVALID_HANDLE_VALUE || !GetFileSizeEx(hFile, &file_size)) {
         return -1;
     }
@@ -106,12 +93,11 @@ long long get_file_size(const std::filesystem::path &file_path) {
 
 }
 
-size_t get_size_change(std::filesystem::path file_path) {
+//size_t get_size_change(const std::filesystem::path& file_path) {
     //Find difference in size. Should return how much size has changed since last edit.
-}
+//}
 
 int main() {
-
     std::string full_dir;
     std::cout << "Paste the full path of a file you wish to log:\n";
     std::cin >> full_dir;
