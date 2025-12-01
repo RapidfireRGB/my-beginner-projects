@@ -1,0 +1,7 @@
+Very basic logging tool that fetches date/time of a file's creation. I will expand this.
+Both the .cpp and .exe are included.
+
+> How to Use It:
+  - To run it in Command Prompt, copy the directory and type 'cd My\Directory\Here'. This will temporarily set the directory for the next command.
+    - Then, type 'fileInfoLogger.exe' and the script will execute.
+      - Once executed, paste the full path of a file, including the name of the file. Be sure to remove quotation marks as that will result in an error.
