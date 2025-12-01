@@ -11,4 +11,4 @@ I have also included a spreadsheet from when I drafted the room layout and .png 
 > How to Use It:
   - Run it in either your IDE of choice, or run it in Command Prompt.
     - To run it in Command Prompt, copy the directory and type 'cd My\Directory\Here'. This will temporarily set the directory for the next command.
-      - Then, type 'py textAdventureGame.py' and the script will execute.
+      - Then, type 'py AdventureGame.py' and the script will execute.
