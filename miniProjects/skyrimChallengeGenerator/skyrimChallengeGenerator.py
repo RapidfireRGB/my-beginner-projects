@@ -4,11 +4,11 @@ def main():
 
     num_skills = 3
 
-    challenges = ["Ironman", "No Fast Travel", "Permadeath", "One HP", "Inheritance Money Only",
+    challenges = ["Ironman", "No Fast Travel", "Permadeath", "One HP",
                   "Complete the Goal in Under 1 Hour", "Pacifist"]
 
     modifiers = ["Cannot Level Up", "Cannot Craft", "No Essential NPCs", "No Followers", "No Sleeping",
-                 "No Crime", "For Magic, Only Use Spells From Apocalypse Magic."]
+                 "No Crime", "For Magic, Only Use Spells From Apocalypse Magic", "Must use Survival Mode"]
 
     goals = ["Reach the Peak of the Throat of the World", "Defeat Alduin", "Own Property in Every Hold",
              "Discover Each Standing Stone", "Reach 100 in a Skill Naturally", "Befriend 10 NPCs",
@@ -42,4 +42,5 @@ def main():
           f'Skills: {r.choices(skills, k=num_skills)}')
 
     #print(f'Attributes: {attributes}')
+
 main()
