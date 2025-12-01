@@ -7,7 +7,6 @@
 FILETIME ftCreate;
 FILETIME ftAccess;
 FILETIME ftWrite;
-FILETIME ftLastWriteTime;
 SYSTEMTIME stUTC, stLocal, stLocalTime;
 
 time_t get_created_at(const std::filesystem::path &file_path) {
@@ -20,28 +19,33 @@ time_t get_created_at(const std::filesystem::path &file_path) {
                                nullptr);
 
     //Revisit this part of the function.
-    if (exists(file_path)) {
-        const time_t created_at = !GetFileTime(hFile,
-            &ftCreate,
-            &ftAccess,
-            &ftWrite);
-
-        FileTimeToSystemTime(&ftWrite, &stUTC);
-        SystemTimeToTzSpecificLocalTime(nullptr, &stUTC, &stLocal);
-
-        //TODO try to turn this block into return statement
-        std::cout << "Created on: " << "\n" << "Year: " << stLocal.wYear << "\n"
-        << "Month: "<< stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
-        << "Hour: " << stLocal.wHour << "\n" << "Minutes: " << stLocal.wMinute << "\n"
-        << "Seconds: " << stLocal.wSecond << "\n";
-
-
-        return created_at;
-    } else {
+    if (!GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite) || !exists(file_path)) {
         //Error handle here.
         std::cerr << "File does not exist or was not found. Make sure you paste the "
                      "path and file name correctly without quotation marks." << "\n";
+        return -1;
     }
+
+    FileTimeToSystemTime(&ftCreate, &stUTC);
+    SystemTimeToTzSpecificLocalTime(nullptr, &stUTC, &stLocal);
+    CloseHandle(hFile);
+
+    //TODO move this to main.
+    std::cout << "Created on: " << "\n" << "Year: " << stLocal.wYear << "\n"
+    << "Month: "<< stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
+    << "Hour: " << stLocal.wHour << "\n" << "Minutes: " << stLocal.wMinute << "\n"
+    << "Seconds: " << stLocal.wSecond << "\n";
+
+    // conversion to time_t
+    tm created_at{};
+    created_at.tm_year = stLocal.wYear - 1900;
+    created_at.tm_mon = stLocal.wMonth - 1;
+    created_at.tm_mday = stLocal.wDay;
+    created_at.tm_hour = stLocal.wHour;
+    created_at.tm_min = stLocal.wMinute;
+    created_at.tm_sec = stLocal.wSecond;
+
+    return mktime(&created_at);
 }
 
 time_t get_modified_at(const std::filesystem::path &file_path) {
@@ -54,17 +58,31 @@ time_t get_modified_at(const std::filesystem::path &file_path) {
         FILE_ATTRIBUTE_NORMAL,
         nullptr);
 
-    FileTimeToSystemTime(&ftLastWriteTime, &stLocalTime);
-    if (!exists(file_path)) {
+    if (!GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite) || !exists(file_path)) {
         //Handle error here.
         return -1;
     }
 
+    FileTimeToSystemTime(&ftWrite, &stUTC);
+    SystemTimeToTzSpecificLocalTime(nullptr, &stUTC, &stLocal);
+    CloseHandle(hFile);
+
+    // TODO move this to main.
     std::cout << "Last Modified at: " << "\n" << "Year: " << stLocal.wYear << "\n"
         << "Month: "<< stLocal.wMonth << "\n" << "Day: " << stLocal.wDay << "\n"
         << "Hour: " << stLocal.wHour << "\n" << "Minutes: " << stLocal.wMinute << "\n"
         << "Seconds: " << stLocal.wSecond << "\n";
 
+    // conversion to time_t
+    tm last_edit{};
+    last_edit.tm_year = stLocal.wYear - 1900;
+    last_edit.tm_mon = stLocal.wMonth - 1;
+    last_edit.tm_mday = stLocal.wDay;
+    last_edit.tm_hour = stLocal.wHour;
+    last_edit.tm_min = stLocal.wMinute;
+    last_edit.tm_sec = stLocal.wSecond;
+
+    return mktime(&last_edit);
 }
 
 long long get_file_size(const std::filesystem::path &file_path) {
