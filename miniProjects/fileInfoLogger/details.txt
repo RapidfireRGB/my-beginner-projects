@@ -1,7 +1,9 @@
-Very basic logging tool that fetches date/time of a file's creation. I will expand this.
+Very basic logging tool that fetches timestamps for a file's creation and last edit. Also fetches the file's size in Bytes.
 Both the .cpp and .exe are included.
 
+IMPORTANT: Make sure the file you want to fetch is in the same directory as the .exe at runtime.
+
 > How to Use It:
-  - To run it in Command Prompt, copy the directory and type 'cd My\Directory\Here'. This will temporarily set the directory for the next command.
-    - Then, type 'fileInfoLogger.exe' and the script will execute.
+  - To run it in Command Prompt, copy the directory and type 'cd My\Directory\Here' into Command Prompt. This will temporarily set the directory for the next command.
+    - Then, type 'fileInfoLogger.exe' and the code will execute.
       - Once executed, paste the full path of a file, including the name of the file. Be sure to remove quotation marks as that will result in an error.
