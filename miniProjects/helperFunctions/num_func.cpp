@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 // Checks if a positive integer is even. Returns bool.
 bool iseven(const int n) {
@@ -11,7 +12,7 @@ bool iseven(const int n) {
 
 // Checks if a positive integer is odd. Returns bool.
 bool isodd(const int n) {
-    if (n > 1 && !iseven(n)) {
+    if (n >= 1 && !iseven(n)) {
         return true;
     }
     return false;
@@ -53,7 +54,7 @@ int count_digits(const int n) {
 
 // Compares two values. Returns the greatest of the two. Accepts two double parameters and an optional default value.
 // Returns double.
-double greater(const double a, const double b, const double default_val = 0) {
+double greater(const double a, const double b, const double default_val = 0.0) {
     if (a > b) {
         return a;
     } else if (a < b) {
@@ -95,7 +96,7 @@ int square(const int n) {
     return n * n;
 }
 
-long long cube(const long long n) {
+long long cube(const int n) {
     return n * n * n;
 }
 
