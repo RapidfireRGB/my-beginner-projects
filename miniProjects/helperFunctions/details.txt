@@ -1,4 +1,0 @@
-This directory contains a few functions I have written to basically create shortcuts for myself.
-
-  str_func.cpp: Contains basic string manipulation functions.
-  num_func.cpp: Contains arithmetic and comparison functions. Work in Progress.
