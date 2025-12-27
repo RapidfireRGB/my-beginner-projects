@@ -55,7 +55,7 @@ struct sphere : 3dshape {
     }
 
 	// Prints info of a sphere. Type void.
-	void properties() {
+	void properties() const override {
 		std::cout << "Surface Area: " << surface_area << "\n";
 		std::cout << "Volume: " << volume << "\n";
 		std::cout << "Radius: " << radius << "\n";
@@ -139,3 +139,4 @@ struct cylinder : 3dshape {
 
 
 };
+
