@@ -140,8 +140,8 @@ int main() {
     std::cin >> user_wants_log;
 
     if (user_wants_log == 'y') {
-        if (std::ofstream log("logfile.txt"); log.is_open()) {
-            freopen("logfile.txt", "w", stdout);
+        if (std::ofstream log("filetime_info.txt"); log.is_open()) {
+            freopen("filetime_info.txt", "w", stdout);
             //This block gets saved.
             std::cout << full_dir << ":\n";
             get_created_at(full_dir);
@@ -150,8 +150,8 @@ int main() {
             std::cout << "----------------------\n";
             freopen("CON", "w", stdout);
 
-            if (log.is_open() && get_file_size("logfile.txt") > 0) {
-                std::cout << "Successfully logged file.";
+            if (log.is_open() && get_file_size("filetime_info.txt") > 0) {
+                std::cout << "Successfully wrote to file.";
                 log.close();
             } else {
                 std::cerr << "\n\nERROR: File could not be saved.";
@@ -175,3 +175,4 @@ int main() {
     }
     return 0;
 }
+
