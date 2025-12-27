@@ -4,8 +4,8 @@ This folder contains structs I wrote to practice object oriented programming in 
 
   3dgeometry_types.cpp: Defining basic three-dimensional shapes to practice inheritance and polymorphism.
 
-  blocktype.cpp: My attempt at creating a container type. A block stores up to 4 integers at a time and can be accessed by indexing. My goal is to have unused integers be totally nonexistent, but for now they are represented with a value of 0.
+  block_type.cpp: My attempt at creating a container type. A block stores up to 4 integers at a time and can be accessed by indexing. My goal is to have unused integers be totally nonexistent, but for now they are represented with a value of 0.
 
-  fractiontype.cpp: Defines type fraction with a numerator and denominator. Has methods for doing basic arithmetic with fractions (addition, multiplication etc).
+  fraction_type.cpp: Defines type fraction with a numerator and denominator. Has methods for doing basic arithmetic with fractions (addition, multiplication etc).
 
  
