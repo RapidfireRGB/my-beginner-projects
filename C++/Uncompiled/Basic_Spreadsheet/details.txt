@@ -1,0 +1,1 @@
+This project is my attempt at creating a minimal spreadsheet program. Work in progress. I will create and build a main .cpp file once the classes are fully functional.
