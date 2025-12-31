@@ -1,1 +1,4 @@
 This project is my attempt at creating a minimal spreadsheet program. Work in progress. I will create and build a main .cpp file once the classes are fully functional.
+
+  src/cell_type.h: Contains definition for a spreadsheet 'cell.' Also contains definitions for cell types and cell names/addresses.
+  src/grid.h: Contains the spreadsheet class, which is a 2d vector container of cells.
