@@ -1,4 +1,4 @@
-//#include <iostream>
+#include <iostream>
 #include "src/cell_type.h"
 #include "src/grid.h"
 
@@ -11,5 +11,6 @@ int main() {
     cell_1.contents = "Hello World";
     cell_1.type = cell_type::Expression;
     cell_1.info();
+    std::cout << spreadsheet::is_valid_syntax("Z99");
     return 0;
 }
