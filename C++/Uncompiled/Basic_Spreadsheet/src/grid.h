@@ -76,8 +76,7 @@ struct spreadsheet {
         return false;
     }
 
-    // TODO debug this
-    // TODO maybe refactor this into separate functions; one that returns cell_address and one that does arithmetic
+    // Evaluates expression strings "=A1 + B2" etc and returns a cell with that value.
     [[nodiscard]] cell evaluate_expression(std::string cell_argument) const {
 
         // Defines two separate strings, which are the operands within an expression.
@@ -101,26 +100,26 @@ struct spreadsheet {
         cell_argument.erase(0, 1);
 
         // TODO THIS IS ALWAYS THROWING std::out_of_range
-        try {
+        //try {
             // When an operation is found, everything to the left becomes first_operand.
             // Everything to the right of the operator become second_operand.
-            for (size_t i = 0; i <= 3; i++) {
-                constexpr std::array<char, 4> operations {
-                    '+', '-', '*', '/'
-                };
+            //for (size_t i = 0; i <= 3; i++) {
+                //constexpr std::array<char, 4> operations {
+                    //'+', '-', '*', '/'
+                //};
 
-                first_operand = cell_argument.substr(
-                    0,
-                    cell_argument.find(operations[i]));
+                //first_operand = cell_argument.substr(
+                    //0,
+                    //cell_argument.find(operations[i]));
 
-                second_operand = cell_argument.substr(
-                    cell_argument.find(operations[i]),
-                    cell_argument.length() - first_operand.length());
-            }
-        } catch (...) {
-            first_operand = cell_argument.substr(0, 2);
-            second_operand = cell_argument.substr(3, 2);
-        }
+                //second_operand = cell_argument.substr(
+                    //cell_argument.find(operations[i]),
+                    //cell_argument.length() - first_operand.length());
+            //}
+        //} catch (...) {
+        first_operand = cell_argument.substr(0, 2);
+        second_operand = cell_argument.substr(3, 2);
+        //}
 
         // If either substring is not a valid cell_address, return an empty cell. Else, function continues.
         if (!is_valid_syntax(first_operand)
@@ -128,18 +127,17 @@ struct spreadsheet {
             new_cell.clear();
             return new_cell;
         }
-        // TODO remove after debugging
-        std::cout << first_operand;
-        std::cout << second_operand;
+        if (!has_cell(first_operand)
+            || !has_cell(second_operand)) {
+            new_cell.clear();
+            return new_cell;
+        }
 
         // Construct a cell address, retrieve the index, then perform operations with the cell's value.
         const cell_address cell_1(first_operand);
         const cell_address cell_2(second_operand);
-        // TODO remove after debugging
-        std::cout << cell_1.col_dex;
-        std::cout << cell_1.row_dex;
-        std::cout << cell_2.col_dex;
-        std::cout << cell_2.row_dex;
+
+
 
         // If operations can be performed, set value equal to new value after operations have been done,
         // Checks whether operator chars exist in cell_argument and does appropriate arithmetic with cell values.
@@ -159,11 +157,7 @@ struct spreadsheet {
             new_cell.value = sheet[cell_1.col_dex][cell_1.row_dex].value
             / sheet[cell_2.col_dex][cell_2.row_dex].value;
         }
-        // TODO remove after debugging
-        std::cout << new_cell.value;
-        new_cell.info();
 
-        // TODO this is not returning for some reason
         return new_cell;
     }
 

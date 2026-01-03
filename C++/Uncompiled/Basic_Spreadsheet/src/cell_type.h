@@ -45,12 +45,13 @@ struct cell {
     }
 
     // Operator overloading for setting a cell equal to another.
-    cell operator=(const cell& c) const {
-        cell new_cell;
-        new_cell.write(c.contents);
-        new_cell.value = c.value;
-        //new_cell.type = c.type;
-        return new_cell;
+    cell& operator=(const cell& c) {
+        if (this != &c) {
+            type = c.type;
+            contents = c.contents;
+            value = c.value;
+        }
+        return *this;
     }
 
     // Comparison '==' overloading
