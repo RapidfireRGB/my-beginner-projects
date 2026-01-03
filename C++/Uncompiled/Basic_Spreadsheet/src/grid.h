@@ -7,7 +7,6 @@
 #include <array>
 #include <algorithm>
 #include <cctype>
-#include <map>
 
 struct spreadsheet {
     std::vector<std::vector<cell>> sheet;
@@ -16,7 +15,6 @@ struct spreadsheet {
 
     // Define dimensions of a sheet. Also resizes the vector.
     spreadsheet(const int c, const int r) : column(c), row(r) {
-        // TODO do proper 2d vector resizing with a for loop
         sheet.resize(c);
 
         // This should correctly resize the vector.
@@ -28,12 +26,15 @@ struct spreadsheet {
     // TODO add validation for expressions somewhere.
 
     // Returns the cell at a specific [column][row] position.
-    // TODO see if operator overloading is possible instead.
     [[nodiscard]] cell at(const int c, const int r) const {
         return sheet[c][r];
     }
 
-    // TODO maybe move this to cell_address class
+    // Alternatively, use operator overloading (EX: sheet_name[column][row])
+    std::vector<cell>& operator[](const int col) {
+        return sheet[col];
+    }
+
     // Helper function to check if a cell position is typed correctly. Returns type bool.
     static bool is_valid_syntax(const std::string& cell_position) {
         // Must have at least one char and at least one int; anything less is invalid.
@@ -57,7 +58,7 @@ struct spreadsheet {
             // If this line raises an error, return false. Else, function continues.
             std::stoi(temp);
         }
-        catch (std::invalid_argument) {
+        catch (std::invalid_argument&) {
             return false;
         }
 
@@ -75,7 +76,7 @@ struct spreadsheet {
         return false;
     }
 
-    // TODO test this entire function
+    // TODO debug this
     // TODO maybe refactor this into separate functions; one that returns cell_address and one that does arithmetic
     [[nodiscard]] cell evaluate_expression(std::string cell_argument) const {
 
@@ -85,8 +86,6 @@ struct spreadsheet {
         std::string second_operand;
 
         // Defines a new cell. Assumes cell_type::Expression. Sets contents equal to string parameter.
-        // If operations can be performed, set value equal to new value after operations have been done,
-        // Else, return an empty cell.
         cell new_cell;
         new_cell.type = cell_type::Expression;
         new_cell.contents = cell_argument;
@@ -101,8 +100,7 @@ struct spreadsheet {
         // Erase '='; should be left with 'A1+B2' at this point
         cell_argument.erase(0, 1);
 
-        // TODO revisit this; find a better method
-        // put a try for here to check each operation
+        // TODO THIS IS ALWAYS THROWING std::out_of_range
         try {
             // When an operation is found, everything to the left becomes first_operand.
             // Everything to the right of the operator become second_operand.
@@ -120,7 +118,8 @@ struct spreadsheet {
                     cell_argument.length() - first_operand.length());
             }
         } catch (...) {
-            // do something if no operation found
+            first_operand = cell_argument.substr(0, 2);
+            second_operand = cell_argument.substr(3, 2);
         }
 
         // If either substring is not a valid cell_address, return an empty cell. Else, function continues.
@@ -129,29 +128,42 @@ struct spreadsheet {
             new_cell.clear();
             return new_cell;
         }
+        // TODO remove after debugging
+        std::cout << first_operand;
+        std::cout << second_operand;
 
         // Construct a cell address, retrieve the index, then perform operations with the cell's value.
         const cell_address cell_1(first_operand);
         const cell_address cell_2(second_operand);
+        // TODO remove after debugging
+        std::cout << cell_1.col_dex;
+        std::cout << cell_1.row_dex;
+        std::cout << cell_2.col_dex;
+        std::cout << cell_2.row_dex;
 
+        // If operations can be performed, set value equal to new value after operations have been done,
         // Checks whether operator chars exist in cell_argument and does appropriate arithmetic with cell values.
         if (cell_argument.find('+') != std::string::npos) {
-            new_cell.value = at(cell_1.col_dex, cell_1.row_dex).value
-            + at(cell_2.col_dex, cell_2.row_dex).value;
+            new_cell.value = sheet[cell_1.col_dex][cell_1.row_dex].value
+            + sheet[cell_2.col_dex][cell_2.row_dex].value;
 
         } else if (cell_argument.find('-') != std::string::npos) {
-            new_cell.value = at(cell_1.col_dex, cell_1.row_dex).value
-            - at(cell_2.col_dex, cell_2.row_dex).value;
+            new_cell.value = sheet[cell_1.col_dex][cell_1.row_dex].value
+            - sheet[cell_2.col_dex][cell_2.row_dex].value;
 
         } else if (cell_argument.find('*') != std::string::npos) {
-            new_cell.value = at(cell_1.col_dex, cell_1.row_dex).value
-            * at(cell_2.col_dex, cell_2.row_dex).value;
+            new_cell.value = sheet[cell_1.col_dex][cell_1.row_dex].value
+            * sheet[cell_2.col_dex][cell_2.row_dex].value;
 
         } else if (cell_argument.find('/') != std::string::npos) {
-            new_cell.value = at(cell_1.col_dex, cell_1.row_dex).value
-            / at(cell_2.col_dex, cell_2.row_dex).value;
+            new_cell.value = sheet[cell_1.col_dex][cell_1.row_dex].value
+            / sheet[cell_2.col_dex][cell_2.row_dex].value;
         }
+        // TODO remove after debugging
+        std::cout << new_cell.value;
+        new_cell.info();
 
+        // TODO this is not returning for some reason
         return new_cell;
     }
 
@@ -175,57 +187,15 @@ struct spreadsheet {
         return true;
     }
 
-    // Converts a cell's sheet index '[column][row]' to a cell address. Accepts two integers. returns type cell_address.
-    [[nodiscard]] cell_address index_to_address(const int c, const int r) {
-        std::map<int, char> char_index {
-            {0, 'A'},
-            {1, 'B'},
-            {2, 'C'},
-            {3, 'D'},
-            {4, 'E'},
-            {5, 'F'},
-            {6, 'G'},
-            {7, 'H'},
-            {8, 'I'},
-            {9, 'J'},
-            {10, 'K'},
-            {11, 'L'},
-            {12, 'M'},
-            {13, 'N'},
-            {14, 'O'},
-            {15, 'P'},
-            {16, 'Q'},
-            {17, 'R'},
-            {18, 'S'},
-            {19, 'T'},
-            {20, 'U'},
-            {21, 'V'},
-            {22, 'W'},
-            {23, 'X'},
-            {24, 'Y'},
-            {25, 'Z'}
-        };
-
-        // Defines column and row, then concatenates them into a new string.
-        const char cell_column = char_index[c];
-        const int cell_row = r + 1;
-        const std::string address_string = cell_column + std::to_string(cell_row);
-
-        // Defines a cell address from the string and returns it.
-        const cell_address address(address_string);
-        return address;
-    }
-
-    // Prints whitespace separated columns and linebreak separated rows representing sheet contents. Type void.
-    // Displays cells by their respective cell address 'A1' etc
-    void cells() {
-        // insert cell address to string conversion. then input string to has_cell() within for loop.
-        for (int i = 0; i <= sheet.size(); i++) {
-            // insert conversion from cell index to cell address string here
-
+    // Prints a sheet's cells separated by whitespace
+    void cells() const {
+        for (int c = 0; c <= sheet.size(); c++) {
+            for (int r = 0; r <= sheet.size(); r++) {
+                sheet[c][r].info();
+                std::cout << " ";
+            }
         }
     }
-
 };
 
 #endif //BASIC_SPREADSHEET_GRID_H

@@ -44,46 +44,64 @@ struct cell {
         }
     }
 
-    // TODO need function to perform operations on cells
-    // TODO try operator overloading here.
-    void add(const cell& operand) {
-        if (type == cell_type::Empty
-            || type == cell_type::Text
-            || operand.type == cell_type::Empty
-            || operand.type == cell_type::Text) {
-            std::cerr << "You cannot evaluate Strings or Empty Cells.\n";
-        }
-
-        value = value + operand.value;
-
-    }
-
-    // TODO revisit these functions.
-    //void sub(const cell& operand) {
-        //value = value - operand.value;
-    //}
-
-    //void mult(const cell& operand) {
-        //value = value * operand.value;
-    //}
-
-    //void div(const cell operand) {
-
-    //}
-
     // Operator overloading for setting a cell equal to another.
     cell operator=(const cell& c) const {
         cell new_cell;
-        new_cell.contents = c.contents;
+        new_cell.write(c.contents);
         new_cell.value = c.value;
-        new_cell.type = c.type;
+        //new_cell.type = c.type;
         return new_cell;
     }
 
+    // Comparison '==' overloading
+    bool operator==(const cell& c) const {
+        if (value == c.value) {
+            return true;
+        }
+        return false;
+    }
 
+    // Comparison '!=' overloading
+    bool operator!=(const cell& c) const {
+        if (value == c.value) {
+            return false;
+        }
+        return true;
+    }
+
+    // Comparison '>' overloading
+    bool operator>(const cell& c) const {
+        if (value > c.value) {
+            return true;
+        }
+        return false;
+    }
+
+    // Comparison '>=' overloading
+    bool operator>=(const cell& c) const {
+        if (value > c.value || value == c.value) {
+            return true;
+        }
+        return false;
+    }
+
+    // Comparison '<' overloading
+    bool operator<(const cell& c) const {
+        if (value < c.value) {
+            return true;
+        }
+        return false;
+    }
+
+    // Comparison '<=' overloading
+    bool operator<= (const cell& c) const {
+        if (value < c.value || value == c.value) {
+            return true;
+        }
+        return false;
+    }
 
     // Helper function to see if two cells are the same type. Returns type bool.
-    // Needed to do operations later.
     [[nodiscard]] bool same(const cell& operand) const {
         if (type == operand.type) {
             return true;
@@ -91,28 +109,28 @@ struct cell {
         return false;
     }
 
-    // Prints elements of a cell. Type void. Currently for debugging only.
+    // Prints elements of a cell, separated by vertical bars '|'. Type void.
     void info() const {
+        std::string typestring;
+
         if (type == cell_type::Empty) {
-            std::cout << "Type: Empty\n";
+            typestring = "Type: Empty";
         } else if (type == cell_type::Text) {
-            std::cout << "Type: Text\n";
+            typestring = "Type: Text";
         } else if (type == cell_type::Value) {
-            std::cout << "Type: Value\n";
+            typestring = "Type: Value";
         } else if (type == cell_type::Expression) {
-            std::cout << "Type: Expression\n";
-        } else {
-            std::cout << "Type: Unknown\n";
+            typestring = "Type: Expression";
         }
-        std::cout << contents << "\n";
-        std::cout << value << "\n";
+
+        std::cout << "|" << "'" << typestring << "'";
+        std::cout << "'" << contents << "'";
+        std::cout << "'" << value << "'" << "|";
     }
 
     // TODO add validate function to reassign cell type based on current content.
-    // TODO add validation for expression syntax
-
 };
-// use this class to convert 'A1' to valid index for sheet vector
+// Use this class to convert 'A1' to valid index for sheet vector
 struct cell_address {
     int col_dex;
     int row_dex;
@@ -152,8 +170,50 @@ struct cell_address {
         };
         col_dex = position_index[address.front()];
         address.erase(0, 1);
-        row_dex = std::stoi(address);
+        // Minus 1 for accurate index position
+        row_dex = std::stoi(address) - 1;
     }
 
+    // Converts a cell's sheet index '[column][row]' to a cell address. Accepts two integers. returns type cell_address.
+    static cell_address index_to_address(const int c, const int r) {
+        std::map<int, char> char_index {
+                {0, 'A'},
+                {1, 'B'},
+                {2, 'C'},
+                {3, 'D'},
+                {4, 'E'},
+                {5, 'F'},
+                {6, 'G'},
+                {7, 'H'},
+                {8, 'I'},
+                {9, 'J'},
+                {10, 'K'},
+                {11, 'L'},
+                {12, 'M'},
+                {13, 'N'},
+                {14, 'O'},
+                {15, 'P'},
+                {16, 'Q'},
+                {17, 'R'},
+                {18, 'S'},
+                {19, 'T'},
+                {20, 'U'},
+                {21, 'V'},
+                {22, 'W'},
+                {23, 'X'},
+                {24, 'Y'},
+                {25, 'Z'}
+        };
+
+        // Defines column and row, then concatenates them into a new string.
+        const char cell_column = char_index[c];
+        // Plus 1 for accurate row number
+        const int cell_row = r + 1;
+        const std::string address_string = cell_column + std::to_string(cell_row);
+
+        // Defines a cell address from the string and returns it.
+        const cell_address address(address_string);
+        return address;
+    }
 };
 #endif //BASIC_SPREADSHEET_CELL_TYPE_H
