@@ -31,6 +31,50 @@ inline bool contains(const std::string &str, const char character) {
     return false;
 }
 
+// Strip whitespace out of a string. Returns a substring.
+inline std::string strip(const std::string &str) {
+    // Return an empty string if original string is empty.
+    if (str.empty()) {
+        return "";
+    }
+    std::string new_str = str;
+    for (int i = 0; i <= str.size()-1; i++) {
+        if (str[i] == ' ') {
+            new_str.erase(i, 1);
+            i--;
+        }
+    }
+    return new_str;
+}
+
+// Returns longest of two strings.
+inline std::string longest(std::string str_1, std::string str_2) {
+    if (str_1.length() > str_2.length()) {
+        return str_1;
+    }
+    if (str_2.length() > str_1.length()) {
+        return str_2;
+    }
+    if (str_1.length() == str_2.length()) {
+        return str_1;
+    }
+    return "";
+}
+
+// Returns shortest of two strings.
+inline std::string shortest(std::string str_1, std::string str_2) {
+    if (str_1.length() < str_2.length()) {
+        return str_1;
+    }
+    if (str_2.length() < str_1.length()) {
+        return str_2;
+    }
+    if (str_1.length() == str_2.length()) {
+        return str_1;
+    }
+    return "";
+}
+
 // Returns a reversed string.
 inline std::string reverse(const std::string &str) {
     std::string new_str;
@@ -316,27 +360,27 @@ inline std::string rearrange(std::string str, const int pos_1, const int pos_2) 
     return new_str;
 }
 
-// Returns a vector of all possible permutations of a string.
-inline std::vector<std::string> permutations(std::string str) {
-    std::vector<std::string> permutations;
-    // Does not need to proceed if string length is 0 or 1.
-    if (str.length() == 0 || str.length() == 1) {
-        permutations.push_back(str);
-        return permutations;
+// Helper function to rearrange a string for a given permutation of a string.
+// Takes string, storage vector, and optional starting position (defaults to 0).
+inline void permute(const std::string &str, std::vector<std::string> &output, const int pos=0) {
+    // Bounds checking.
+    if (pos == str.length() - 1) {
+        output.push_back(str);
+        return;
     }
-    if (str.length() == 2) {
-        permutations.push_back(str);
-        permutations.push_back(reverse(str));
-        return permutations;
+    // Recursive loop calls function until i reaches string bounds.
+    for (int i = pos; i < str.length(); i++) {
+        std::string new_str = rearrange(str, pos, i);
+        permute(new_str, output, pos + 1);
     }
-    // Store each char in local vector.
-    std::vector<char> char_storage = str_to_char_vec(str);
+}
 
-    for (int i = 0; i < char_storage.size()-1; i++) {
-        for (int j = char_storage.size(); j >= i; j--) {
-            permutations.push_back(rearrange(str, i, j));
-            }
-        }
+// Returns a vector of all possible permutations of a string.
+inline std::vector<std::string> permutations(const std::string &str) {
+    std::vector<std::string> permutations;
+    // Call to permute function to store permutations in the vector
+    permute(str, permutations);
+    // Should return a vector with size of factorial str.size()
     return permutations;
 }
 

@@ -58,6 +58,206 @@ inline int last_odd(const int n) {
     return n - 1;
 }
 
+// Returns the sign of a integer.
+inline int sign(const int n) {
+    if (n == 0) {
+        return 0;
+    }
+    if (n > 0) {
+        return 1;
+    }
+    if (n < 0) {
+        return -1;
+    }
+    // Defaults to returning zero.
+    return 0;
+}
+
+// Returns true if integer n is divisible by specified number
+inline bool divisible_by(const int n, const int divisor) {
+    if (n % divisor == 0) {
+        return true;
+    }
+    return false;
+}
+
+// If integer n is evenly divisible by 10, return true
+inline bool divisible_10(const int n) {
+    if (n % 10 == 0) {
+        return true;
+    }
+    return false;
+}
+
+// Returns greatest common divisor with specified starting point.
+// EX: start=50 -> return value between (1-50)
+inline int gcd(const int n, const int start=10) {
+    for (int i = start; n % i != 0 && i > 0; i--) {
+        if (n % i == 0) {
+            return i;
+        }
+    }
+    return 1;
+}
+
+// Returns greatest common divisor of a number (1-20).
+inline int gcd_20(const int n) {
+    for (int i = 20; n % i != 0 && i > 0; i--) {
+        if (n % i == 0) {
+            return i;
+        }
+    }
+    return 1;
+}
+
+// Returns least common multiple with specified end point.
+inline int lcm(const int n, const int end=10) {
+    if (end == 0) {
+        return 0;
+    }
+    if (n % 2 == 0) {
+        return 2;
+    }
+    for (int i = 2; n % i != 0 && i <= end; i++) {
+        if (n % i == 0) {
+            return i;
+        }
+    }
+    return 1;
+}
+
+// Returns Least common multiple betwen (1-20).
+inline int lcm_20(const int n) {
+    if (n % 2 == 0) {
+        return 2;
+    }
+    for (int i = 2; n % i != 0 && i <= 20; i++) {
+        if (n % i == 0) {
+            return i;
+        }
+    }
+    return 1;
+}
+
+// Returns true if prime and false if not.
+inline bool is_prime(const int n) {
+    if (sign(n) == -1) {
+        return false;
+    }
+    if (n == 0 || n == 1) {
+        return false;
+    }
+    const int lcm_check = lcm(n, n);
+    if (lcm_check > 1) {
+        return false;
+    }
+    if (lcm_check == 1 || lcm_check == n) {
+        return true;
+    }
+    return false;
+}
+
+// Returns a rounded floating point number to the specified decimal place.
+//inline double round_dbl(const double n, int places) {
+
+//}
+
+//inline float round_flt()
+
+// Returns the maximum value in a vector.
+inline int vec_int_max(const std::vector<int> &range) {
+    if (range.empty()) {
+        return 0;
+    }
+    int max = range[0];
+    for (int i = 1; i <= range.size()-1; i++) {
+        if (range[i] > max) {
+            max = range[i];
+        }
+    }
+    return max;
+}
+
+// Returns the minimum value in a vector.
+inline int vec_int_min(const std::vector<int> &range) {
+    if (range.empty()) {
+        return 0;
+    }
+    int min = range[0];
+    for (int i = 1; i <= range.size()-1; i++) {
+        if (range[i] < min) {
+            min = range[i];
+        }
+    }
+    return min;
+}
+
+// Returns the maximum value in a vector.
+inline double vec_dbl_max(const std::vector<double> &range) {
+    if (range.empty()) {
+        return 0.0;
+    }
+    double max = range[0];
+    for (int i = 1; i <= range.size()-1; i++) {
+        if (range[i] > max) {
+            max = range[i];
+        }
+    }
+    return max;
+}
+
+// Returns the minimum value in a vector.
+inline double vec_dbl_min(const std::vector<double> &range) {
+    if (range.empty()) {
+        return 0.0;
+    }
+    double min = range[0];
+    for (int i = 1; i <= range.size()-1; i++) {
+        if (range[i] < min) {
+            min = range[i];
+        }
+    }
+    return min;
+}
+
+// Returns clamped value to a range.
+inline int clamp_int(const std::vector<int> &range, const int n) {
+    if (range.empty()) {
+        return 0;
+    }
+    const int min = vec_int_min(range);
+    const int max = vec_int_max(range);
+    if (n <= min) {
+        return min;
+    }
+    if (n >= max) {
+        return max;
+    }
+    if (n > min && n < max) {
+        return n;
+    }
+    return 0;
+}
+
+// Returns clamped value to a range. If below minimum, return minimum. If above maximum, return maximum. Else returns value.
+inline double clamp_dbl(const std::vector<double> &range, const double n) {
+    if (range.empty()) {
+        return 0.0;
+    }
+    const double min = vec_dbl_min(range);
+    const double max = vec_dbl_max(range);
+    if (n <= min) {
+        return min;
+    }
+    if (n >= max) {
+        return max;
+    }
+    if (n > min && n < max) {
+        return n;
+    }
+    return 0.0;
+}
+
 // Returns the number of digits in an integer.
 inline int count_digits_int(const int n) {
     const std::string n_string = std::to_string(n);
@@ -117,15 +317,17 @@ inline long long power(const int a, const int b) {
     return result;
 }
 
+// Returns square of int n.
 inline int square(const int n) {
     return n * n;
 }
 
+// Returns cube of int n.
 inline long long cube(const int n) {
     return n * n * n;
 }
 
-// Custom absolute value function. Returns type double.
+// Returns absolute value of a double.
 inline double absval(const double n) {
     if (n >= 0.0) {
         return n;
@@ -188,5 +390,6 @@ inline std::vector<int> reverse_sequence(const int n) {
     }
     return sequenced_ints;
 }
+
 
 #endif //HELPERFUNCTIONS_NUM_FUNC_H
