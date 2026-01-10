@@ -8,17 +8,26 @@
 
 // Simple print function which accepts a single string parameter. Type void.
 inline void print(const std::string &str) {
+    if (str.empty()) {
+        return;
+    }
     std::cout << str;
 }
 
 // Print function with a line break. Accepts a string parameter. Type void.
 inline void printbr(const std::string &str) {
+    if (str.empty()) {
+        return;
+    }
     std::cout << str << "\n";
 }
 
 // Print function with n number of whitespaces at the end. Defaults to 4.
 // Accepts type string and short. Type void.
 inline void printtab(const std::string &str, const short n = 4) {
+    if (str.empty()) {
+        return;
+    }
     std::cout << str << std::string(n, ' ');;
 }
 
@@ -357,6 +366,56 @@ inline std::string rearrange(std::string str, const int pos_1, const int pos_2) 
     new_str.insert(pos_1, 1, char_2);
     new_str.insert(pos_2, 1, char_1);
 
+    return new_str;
+}
+
+// Returns a filtered substring given a condition.
+inline std::string filter(const std::string &str, const bool condition) {
+    std::string new_str;
+    if (str.empty()) {
+        return new_str;
+    }
+    for (int i = 0; i <= str.size()-1 && condition == true; i++) {
+        new_str += str[i];
+    }
+    return new_str;
+}
+
+// Returns a sliced substring given two index positions.
+inline std::string slice(const std::string &str, int pos_1, int pos_2) {
+    std::string new_str;
+    if (str.empty()) {
+        return new_str;
+    }
+    // Bounds checking.
+    if (pos_1 < 0) {
+        pos_1 = 0;
+    }
+    if (pos_2 > str.size()-1) {
+        pos_2 = str.size()-1;
+    }
+    for (int i = pos_1; i <= pos_2; i++) {
+        new_str += str[i];
+    }
+    return new_str;
+}
+
+// Returns a sliced, filtered substring given two index positions and a condition.
+inline std::string filter_slice(const std::string &str, int pos_1, int pos_2, const bool condition) {
+    std::string new_str;
+    if (str.empty()) {
+        return new_str;
+    }
+    // Bounds Checking.
+    if (pos_1 < 0) {
+        pos_1 = 0;
+    }
+    if (pos_2 > str.size()-1) {
+        pos_2 = str.size()-1;
+    }
+    for (int i = pos_1; i <= pos_2 && condition == true; i++) {
+        new_str += str[i];
+    }
     return new_str;
 }
 
