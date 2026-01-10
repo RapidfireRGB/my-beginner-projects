@@ -1,4 +1,10 @@
 This directory contains a few functions I have written to basically create shortcuts for myself.
 
-  str_func.h: Contains basic string manipulation functions.
-  num_func.h: Contains arithmetic and comparison functions. Work in Progress.
+Basic Types
+  str_func.h: Basic string manipulation such as slicing and re-arranging.
+  num_func.h: Arithmetic and Comparison such as sum, mean, and is prime.
+  bool_func.h: Boolean transformations such as to integer or string; bool vector manipulation such as counting # of true/false
+
+Container Types
+  vect_func.h: Vector manipulation such as reversal, slicing, filtering; transformations such as char to int, and char to string literal.
+  map_func.h: Map manipulation such as conditional insertion; transformations such as map to pair vector.
