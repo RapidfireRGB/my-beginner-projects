@@ -5,8 +5,8 @@
 #include <string>
 #include <map>
 
-template<typename T>
 // Prints contents of a vector.
+template<typename T>
 void print_vec(std::vector<T> range) {
     if (range.empty()) {
         return;
@@ -16,8 +16,8 @@ void print_vec(std::vector<T> range) {
     }
 }
 
-template <typename T>
 // Prints contents of a vector separated by linebreaks.
+template <typename T>
 void printbr_vec(std::vector<T> range) {
     if (range.empty()) {
         return;
@@ -27,8 +27,8 @@ void printbr_vec(std::vector<T> range) {
     }
 }
 
-template <typename T>
 // Prints contents of a vector separated by n number of whitespaces (4 by default)
+template <typename T>
 void printtab_vec(std::vector<T> range, const short n=4) {
     if (range.empty()) {
         return;
@@ -38,8 +38,27 @@ void printtab_vec(std::vector<T> range, const short n=4) {
     }
 }
 
+// Adds elements of two same type vectors and combines results into one vector.
 template <typename T>
+std::vector<T> add(const std::vector<T> &range_1, const std::vector<T> &range_2) {
+    std::vector<T> new_vec;
+    if (range_1.empty() && range_2.empty()) {
+        return new_vec;
+    }
+    int end;
+    if (range_1.size() > range_2.size()) {
+        end = range_1.size()-1;
+    } else {
+        end = range_2.size()-1;
+    }
+    for (int i = 0; i <= end; i++) {
+        new_vec.push_back(range_1[i] + range_2[i]);
+    }
+    return new_vec;
+}
+
 // Returns a reversed vector from another vector.
+template <typename T>
 std::vector<T> reverse(const std::vector<T> &range) {
     std::vector<T> new_vec;
     if (range.empty()) {
@@ -51,8 +70,8 @@ std::vector<T> reverse(const std::vector<T> &range) {
     return new_vec;
 }
 
-template <typename T>
 // Returns a vector of all index positions of specified element.
+template <typename T>
 std::vector<T> indices(const std::vector<T> &range, const T element) {
     std::vector<T> new_vec;
     if (range.empty()) {
@@ -66,8 +85,23 @@ std::vector<T> indices(const std::vector<T> &range, const T element) {
     return new_vec;
 }
 
+// Returns number of occurences of a given element in a vector.
 template <typename T>
+int quantity(const std::vector<T> &range, T element) {
+    if (range.empty()) {
+        return 0;
+    }
+    int quantity = 0;
+    for (int i = 0; i <= range.size()-1; i++) {
+        if (range[i] == element) {
+            quantity++;
+        }
+    }
+    return quantity;
+}
+
 // Returns bool of whether a vector contains a specified element.
+template <typename T>
 bool contains(const std::vector<T> &range, const T element) {
     if (range.empty()) {
         return false;
@@ -80,35 +114,62 @@ bool contains(const std::vector<T> &range, const T element) {
     return false;
 }
 
-template <typename T>
 // Checks if an element is unique
-bool is_unique(std::vector<T> range, T element) {
+template <typename T>
+bool is_unique(const std::vector<T> &range, const T element) {
     if (range.empty() || !contains(range, element)) {
         return false;
     }
-    if (indices(range, element).size() > 1) {
+    if (quantity(range, element) == 1) {
         return true;
     }
     return false;
 }
 
+// Checks if an element is a duplicate
 template <typename T>
+bool is_duplicate(const std::vector<T> &range, T element) {
+    if (range.empty() || !contains(range, element)) {
+        return false;
+    }
+    if (quantity(range, element) > 1) {
+        return true;
+    }
+    return false;
+}
+
 // Returns number of unique elements
-int count_unique(std::vector<T> range) {
+template <typename T>
+int count_unique(const std::vector<T> &range) {
     if (range.empty()) {
         return 0;
     }
     int count = 0;
     for (int i = 1; i <= range.size()-1; i++) {
-        if (indices(range, range[i]).size() == 1) {
+        if (quantity(range, range[i]) == 1) {
             count++;
         }
     }
     return count;
 }
 
+// Returns number of duplicate elements
 template <typename T>
+int count_duplicate(const std::vector<T> &range) {
+    if (range.empty()) {
+        return 0;
+    }
+    int count = 0;
+    for (int i = 0; i <= range.size()-1; i++) {
+        if (quantity(range, range[i]) > 1) {
+            count++;
+        }
+    }
+    return count;
+}
+
 // Returns same type vector containing only one occurrence per unique element.
+template <typename T>
 std::vector<T> unique(const std::vector<T> &range) {
     std::vector<T> new_vec;
     if (range.empty()) {
@@ -123,8 +184,8 @@ std::vector<T> unique(const std::vector<T> &range) {
     return new_vec;
 }
 
-template <typename T>
 // Return a sub vector between two index positions.
+template <typename T>
 std::vector<T> slice(const std::vector<T> &range, int pos_1, int pos_2) {
     std::vector<T> new_vec;
     if (range.empty()) {
@@ -143,17 +204,100 @@ std::vector<T> slice(const std::vector<T> &range, int pos_1, int pos_2) {
     return new_vec;
 }
 
-template <typename T>
 // Return a sub vector containing only elements which satisfy a defined condition.
+template <typename T>
 std::vector<T> filter(const std::vector<T> &range, const bool condition) {
     std::vector<T> new_vec;
     if (range.empty()) {
         return new_vec;
     }
-    for (int i = 0; i <= range.size()-1 && condition == true; i++) {
-        new_vec.push_back(range[i]);
+    for (int i = 0; i <= range.size()-1; i++) {
+         if (condition == true) {
+             new_vec.push_back(range[i]);
+         }
     }
     return new_vec;
+}
+
+// Return a sub vector containing elements which satisfy a condition between two index positions.
+template <typename T>
+std::vector<T> filter_slice(const std::vector<T> &range, const bool condition, int pos_1, int pos_2) {
+    std::vector<T> new_vec;
+    if (range.empty()) {
+        return new_vec;
+    }
+    if (pos_1 < 0) {
+        pos_1 = 0;
+    }
+    if (pos_2 > range.size()-1) {
+        pos_2 = range.size()-1;
+    }
+    for (int i = pos_1; i <= pos_2; i++) {
+        if (condition == true) {
+            new_vec.push_back(range[i]);
+        }
+    }
+    return new_vec;
+}
+
+// Fills vector with a specified value.
+template <typename T>
+void fill(std::vector<T> range, T value) {
+    for (int i = 0; i <= range.size()-1; i++) {
+        range[i] = value;
+    }
+}
+
+// Fills vector with value if condition is met.
+template <typename T>
+void fill_if(std::vector<T> range, T value, const bool condition) {
+    for (int i = 0; i <= range.size()-1; i++) {
+        if (condition == true) {
+            range[i] = value;
+        }
+    }
+}
+
+// Fills vector with a value between two index positions.
+template <typename T>
+void fill_between(std::vector<T> range, T value, int pos_1, int pos_2) {
+    if (pos_1 < 0) {
+        pos_1 = 0;
+    }
+    if (pos_2 > range.size()-1) {
+        pos_2 = range.size()-1;
+    }
+    for (int i = pos_1; i <= pos_2; i++) {
+        range[i] = value;
+    }
+}
+
+// Removes all occurrences of an element.
+template <typename T>
+void erase_all_of(std::vector<T> range, T element) {
+    if (range.empty()) {
+        return;
+    }
+    for (int i = 0; i <= range.size()-1; i++) {
+        if (range[i] == element) {
+            range.erase(range[i]);
+            i--;
+        }
+    }
+}
+
+// Eliminates duplicate elements from a vector.
+template <typename T>
+void reduce(std::vector<T> range) {
+    if (range.empty()) {
+        return;
+    }
+    for (int i = 0; i <= range.size()-1; i++) {
+        if (!is_unique(range, range[i])) {
+            range.erase(range[i]);
+            i--;
+        }
+    }
 }
 
 // Returns a vector of converted int->bool values.
@@ -216,21 +360,9 @@ inline std::vector<int> vec_char_to_int(const std::vector<char> &chars) {
     return new_vec;
 }
 
-// Returns a string made of all elements from a char vector
-inline std::string vec_char_to_strl(const std::vector<char> &chars) {
-    if (chars.empty()) {
-        return "";
-    }
-    std::string new_str;
-    for (int i = 0; i <= chars.size()-1; i++) {
-        new_str += chars[i];
-    }
-    return new_str;
-}
-
-template <typename T>
 // Returns a map of the frequency an element appears {key=element, value=frequency}
-std::map<T, int> frequency(std::vector<T> range) {
+template <typename T>
+std::map<T, int> frequency(const std::vector<T> &range) {
     std::map<T, int> new_map;
     if (range.empty()) {
         return new_map;
@@ -239,6 +371,56 @@ std::map<T, int> frequency(std::vector<T> range) {
         new_map.insert(range[i], indices(range, range[i]).size());
     }
     return new_map;
+}
+
+// Checks whether a vector is sorted in ascending order.
+template <typename T>
+bool is_sorted_asc(const std::vector<T> &range) {
+    if (range.empty()) {
+        return false;
+    }
+    if (range.size() == 1) {
+        return true;
+    }
+    for (int i = 0; i < range.size()-1; i++) {
+        if (range[i] > range[i+1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Checks whether a vector is sorted in descending order.
+template <typename T>
+bool is_sorted_desc(const std::vector<T> &range) {
+    if (range.empty()) {
+        return false;
+    }
+    if (range.size() == 1) {
+        return true;
+    }
+    for (int i = 0; i < range.size()-1; i++) {
+        if (range[i] < range[i+1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Checks whether a string vector is sorted in alphabetical order.
+inline bool is_sorted_alph(const std::vector<std::string> &str) {
+    if (str.empty()) {
+        return false;
+    }
+    if (str.size() == 1) {
+        return true;
+    }
+    for (int i = 0; i < str.size()-1; i++) {
+        if (str[i] > str[i+1]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 #endif //HELPERFUNCTIONS_VECT_FUNC_H

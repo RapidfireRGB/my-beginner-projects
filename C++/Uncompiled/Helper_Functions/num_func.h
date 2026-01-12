@@ -58,8 +58,9 @@ inline int last_odd(const int n) {
     return n - 1;
 }
 
-// Returns the sign of a integer.
-inline int sign(const int n) {
+// Returns the sign of a number.
+template <typename T>
+int sign(const T n) {
     if (n == 0) {
         return 0;
     }
@@ -73,16 +74,18 @@ inline int sign(const int n) {
     return 0;
 }
 
-// Returns true if integer n is divisible by specified number
-inline bool divisible_by(const int n, const int divisor) {
+// Returns true if number n is divisible by specified number
+template <typename T>
+bool divisible_by(const T n, const int divisor) {
     if (n % divisor == 0) {
         return true;
     }
     return false;
 }
 
-// If integer n is evenly divisible by 10, return true
-inline bool divisible_10(const int n) {
+// If number n is evenly divisible by 10, return true
+template <typename T>
+bool divisible_10(const T n) {
     if (n % 10 == 0) {
         return true;
     }
@@ -157,76 +160,44 @@ inline bool is_prime(const int n) {
     return false;
 }
 
-// Returns a rounded floating point number to the specified decimal place.
-//inline double round_dbl(const double n, int places) {
-
-//}
-
-//inline float round_flt()
-
-// Returns the maximum value in a vector.
-inline int vec_int_max(const std::vector<int> &range) {
-    if (range.empty()) {
+// Returns the maximum value in a subscripatable container.
+template <typename T>
+int maximum(const T &container) {
+    if (container.empty()) {
         return 0;
     }
-    int max = range[0];
-    for (int i = 1; i <= range.size()-1; i++) {
-        if (range[i] > max) {
-            max = range[i];
+    int max = container[0];
+    for (int i = 1; i <= container.size()-1; i++) {
+        if (container[i] > max) {
+            max = container[i];
         }
     }
     return max;
 }
 
-// Returns the minimum value in a vector.
-inline int vec_int_min(const std::vector<int> &range) {
-    if (range.empty()) {
+// Returns the minimum value in a subscritptable container.
+template <typename T>
+int minimum(const T &container) {
+    if (container.empty()) {
         return 0;
     }
-    int min = range[0];
-    for (int i = 1; i <= range.size()-1; i++) {
-        if (range[i] < min) {
-            min = range[i];
-        }
-    }
-    return min;
-}
-
-// Returns the maximum value in a vector.
-inline double vec_dbl_max(const std::vector<double> &range) {
-    if (range.empty()) {
-        return 0.0;
-    }
-    double max = range[0];
-    for (int i = 1; i <= range.size()-1; i++) {
-        if (range[i] > max) {
-            max = range[i];
-        }
-    }
-    return max;
-}
-
-// Returns the minimum value in a vector.
-inline double vec_dbl_min(const std::vector<double> &range) {
-    if (range.empty()) {
-        return 0.0;
-    }
-    double min = range[0];
-    for (int i = 1; i <= range.size()-1; i++) {
-        if (range[i] < min) {
-            min = range[i];
+    int min = container[0];
+    for (int i = 1; i <= container.size()-1; i++) {
+        if (container[i] < min) {
+            min = container[i];
         }
     }
     return min;
 }
 
 // Returns clamped value to a range.
-inline int clamp_int(const std::vector<int> &range, const int n) {
-    if (range.empty()) {
+template <typename T, typename N>
+N clamp_int(const T &container, const N n) {
+    if (container.empty()) {
         return 0;
     }
-    const int min = vec_int_min(range);
-    const int max = vec_int_max(range);
+    const N min = minimum(container);
+    const N max = maximum(container);
     if (n <= min) {
         return min;
     }
@@ -239,48 +210,23 @@ inline int clamp_int(const std::vector<int> &range, const int n) {
     return 0;
 }
 
-// Returns clamped value to a range. If below minimum, return minimum. If above maximum, return maximum. Else returns value.
-inline double clamp_dbl(const std::vector<double> &range, const double n) {
-    if (range.empty()) {
-        return 0.0;
-    }
-    const double min = vec_dbl_min(range);
-    const double max = vec_dbl_max(range);
-    if (n <= min) {
-        return min;
-    }
-    if (n >= max) {
-        return max;
-    }
-    if (n > min && n < max) {
-        return n;
-    }
-    return 0.0;
-}
-
 // Returns the number of digits in an integer.
 inline int count_digits_int(const int n) {
     const std::string n_string = std::to_string(n);
     return n_string.length();
 }
 
-// Returns the number of digits in a double.
-inline int count_digits_dbl(const double n) {
+// Returns the number of digits in a floating point number.
+template <typename F>
+int count_digits_flt(const F n) {
     std::string n_string = std::to_string(n);
     n_string.erase(n_string.find('.'), 1);
     return n_string.length();
 }
 
-// Returns the number of digits in a float.
-inline int count_digits_flt(const float n) {
-    std::string n_string = std::to_string(n);
-    n_string.erase(n_string.find('.'), 1);
-    return n_string.length();
-}
-
-// Compares two values. Returns the greatest of the two. Accepts two double parameters and an optional default value.
-// Returns double.
-inline double greater(const double a, const double b, const double default_val = 0.0) {
+// Compares two values. Returns the greatest of the two. Accepts two numerical parameters and an optional default value.
+template <typename T>
+T greater(const T a, const T b, const T default_val = 0) {
     if (a > b) {
         return a;
     }
@@ -290,20 +236,22 @@ inline double greater(const double a, const double b, const double default_val =
     return default_val;
 }
 
-// Sums contents of a vector of type double. Returns double.
-inline double sum(const std::vector<double> &range) {
-    double sum = 0.0;
-    for (const double x : range) {
-        sum += x;
+// Sums contents of a container of numerical values.
+template <typename T, typename N>
+N sum(const T &container) {
+    N sum = 0;
+    for (const N element : container) {
+        sum += element;
     }
     return sum;
 }
 
-// Averages contents of a vector of type double. Returns double.
-inline double mean(const std::vector<double> &range) {
-    double const mean = sum(range) / range.size();
-    if (range.empty()) {
-        return 0.0;
+// Averages contents of a container of numerical values.
+template <typename T, typename N>
+N mean(const T &container) {
+    const N mean = sum(container) / container.size();
+    if (container.empty()) {
+        return 0;
     }
     return mean;
 }
@@ -317,43 +265,49 @@ inline long long power(const int a, const int b) {
     return result;
 }
 
-// Returns square of int n.
-inline int square(const int n) {
+// Returns square of n.
+template <typename T>
+T square(const T n) {
     return n * n;
 }
 
-// Returns cube of int n.
-inline long long cube(const int n) {
+// Returns cube of n.
+template <typename T>
+T cube(const T n) {
     return n * n * n;
 }
 
-// Returns absolute value of a double.
-inline double absval(const double n) {
+// Returns absolute value of n.
+template <typename T>
+double absval(const T n) {
     if (n >= 0.0) {
         return n;
     }
     if (n < 0.0) {
         return n * -1.0;
     }
-    return 0.0;
+    return 0;
 }
 
 // Divide a number by 100 to get its percentage representation. Returns type double.
-inline double percent(const double a) {
+template <typename T>
+double percent(const T a) {
     return a/100;
 }
 
-// Calculates percent change between two numbers. Accepts two doubles and returns double.
-inline double percent_change(const double a, const double b) {
+// Calculates percent change between two numbers.
+template <typename T>
+double percent_change(const T a, const T b) {
     // Cannot divide by zero.
     if (b == 0) {
-        return 0.0;
+        return 0;
     }
     return (a-b)/b * 100;
 }
 
-// Returns the inverse of a given integer.
-inline int inverse(const int n) {
+// Returns the inverse of a given number.
+template <typename T>
+double inverse(const T n) {
     // Cannot divide by zero.
     if (n == 0) {
         return 0;
@@ -361,13 +315,14 @@ inline int inverse(const int n) {
     return 1/n;
 }
 
-// Calculates factorial of int n. Returns type long long.
-inline long long factorial(const int n) {
+// Calculates factorial of n. Returns type long long.
+template <typename T>
+long long factorial(const T n) {
     long long result = 1;
     if (n < 0) {
         return 0;
     }
-    for (int i = n; i > 0; i--) {
+    for (int i = n; i > 0; --i) {
         result *= i;
     }
     return result;
@@ -376,6 +331,7 @@ inline long long factorial(const int n) {
 // Counts every number up to given int and returns a vector with that sequence.
 inline std::vector<int> sequence(const int n) {
     std::vector<int> sequenced_ints;
+    sequenced_ints.reserve(n);
     for (int i = 0; i < n; i++) {
         sequenced_ints.push_back(i + 1);
     }

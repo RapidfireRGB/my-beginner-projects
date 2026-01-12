@@ -100,6 +100,22 @@ inline std::string substitute(const std::string &str, const char c, const int po
     return new_str;
 }
 
+// Checks whether a string has a specified substring.
+inline bool has_substring(const std::string &str, const std::string &substr) {
+    if (str.empty()) {
+        return false;
+    }
+    if (str == substr) {
+        return true;
+    }
+    for (int i = 0; i <= substr.length()-1; i++) {
+        if (str.find(substr[i]) == std::string::npos) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Returns integer representation of a char.
 inline int char_to_int(const char c) {
     std::map<char, int> nums = {
@@ -196,7 +212,7 @@ inline std::string uppercase(std::string str) {
         if (i == str.length()) {
             return new_str;
         }
-        if (i == str.length() && new_str == "") {
+        if (i == str.length() && new_str.empty()) {
             break;
         }
     }
@@ -240,7 +256,7 @@ inline int word_to_int(const std::string &str) {
 // Converts a vector of chars to a string.
 inline std::string vec_to_str(const std::vector<char> &chars) {
     std::string new_str;
-    for (int i = 0; i <= chars.size(); i++) {
+    for (int i = 0; i <= chars.size()-1; i++) {
         new_str += chars[i];
     }
     return new_str;
@@ -249,7 +265,7 @@ inline std::string vec_to_str(const std::vector<char> &chars) {
 // Returns a vector of each char of a string.
 inline std::vector<char> str_to_char_vec(const std::string &str) {
     std::vector<char> chars;
-    for (int i = 0; i < str.length(); i++) {
+    for (int i = 0; i <= str.length()-1; i++) {
         chars.push_back(str[i]);
     }
     return chars;
@@ -258,7 +274,7 @@ inline std::vector<char> str_to_char_vec(const std::string &str) {
 // Return integer of # of vowels in a string.
 inline int count_vowels(const std::string &str) {
     int vowel_count = 0;
-    for (int i = 0; i <= str.size(); i++) {
+    for (int i = 0; i <= str.length()-1; i++) {
         // Checks for j is not greater than array index range
         for (int j = 0; j <= 11; j++) {
             constexpr std::array<char, 12> vowels = {
@@ -375,8 +391,10 @@ inline std::string filter(const std::string &str, const bool condition) {
     if (str.empty()) {
         return new_str;
     }
-    for (int i = 0; i <= str.size()-1 && condition == true; i++) {
-        new_str += str[i];
+    for (int i = 0; i <= str.size()-1; i++) {
+        if (condition == true) {
+            new_str += str[i];
+        }
     }
     return new_str;
 }
@@ -401,7 +419,7 @@ inline std::string slice(const std::string &str, int pos_1, int pos_2) {
 }
 
 // Returns a sliced, filtered substring given two index positions and a condition.
-inline std::string filter_slice(const std::string &str, int pos_1, int pos_2, const bool condition) {
+inline std::string filter_slice(const std::string &str, const bool condition, int pos_1, int pos_2) {
     std::string new_str;
     if (str.empty()) {
         return new_str;
@@ -413,8 +431,10 @@ inline std::string filter_slice(const std::string &str, int pos_1, int pos_2, co
     if (pos_2 > str.size()-1) {
         pos_2 = str.size()-1;
     }
-    for (int i = pos_1; i <= pos_2 && condition == true; i++) {
-        new_str += str[i];
+    for (int i = pos_1; i <= pos_2; i++) {
+        if (condition == true) {
+            new_str += str[i];
+        }
     }
     return new_str;
 }
@@ -441,6 +461,43 @@ inline std::vector<std::string> permutations(const std::string &str) {
     permute(str, permutations);
     // Should return a vector with size of factorial str.size()
     return permutations;
+}
+
+// Checks whether a string is a palindrome.
+inline bool is_palindrome(const std::string &str) {
+    if (str.empty() || str.length() == 1) {
+        return false;
+    }
+    const std::string reversed = reverse(str);
+    for (int i = 0; i <= str.length()-1; i++) {
+        if (str[i] != reversed[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Checks whether a string contains one of every letter in the alphabet.
+inline bool is_pangram(const std::string &str) {
+    if (str.empty() || str.length() == 1) {
+        return false;
+    }
+    std::vector<char> letters = {
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    };
+    for (int i = 0; i <= str.length()-1; i++) {
+        for (int j = 0; j <= letters.size()-1; j++) {
+            if (capchar(str[i]) == letters[j]) {
+                letters.erase(letters.begin() + j);
+                j--;
+            }
+        }
+    }
+    if (letters.empty()) {
+        return true;
+    }
+    return false;
 }
 
 
