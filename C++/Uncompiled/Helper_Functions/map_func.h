@@ -130,7 +130,7 @@ std::vector<std::pair<K, V>> map_to_pair_vec(const std::map<K, V> &map) {
 
 // Returns a vector of extracted keys.
 template <typename K, typename V>
-std::vector<K> extract_keys(std::map<K, V> map) {
+std::vector<K> extract_keys(const std::map<K, V> &map) {
     std::vector<K> new_vec;
     if (map.empty()) {
         return new_vec;
@@ -143,7 +143,7 @@ std::vector<K> extract_keys(std::map<K, V> map) {
 
 // Returns a vector of extracted values.
 template <typename K, typename V>
-std::vector<V> extract_values(std::map<K, V> map) {
+std::vector<V> extract_values(const std::map<K, V> &map) {
     std::vector<V> new_vec;
     if (map.empty()) {
         return new_vec;
@@ -152,6 +152,18 @@ std::vector<V> extract_values(std::map<K, V> map) {
         new_vec.push_back(value);
     }
     return new_vec;
+}
+
+// Returns a value for a key, or a default value if key is missing.
+template <typename K, typename V>
+V get_value_or(const std::map<K, V> &map, const K key, const V default_value) {
+    if (map.empty()) {
+        return default_value;
+    }
+    if (!contains_key(map, key)) {
+        return default_value;
+    }
+    return map[key];
 }
 
 // TODO handle non numerical elements here.

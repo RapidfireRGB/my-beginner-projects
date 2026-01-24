@@ -116,6 +116,44 @@ inline bool has_substring(const std::string &str, const std::string &substr) {
     return true;
 }
 
+// Checks whether chars '(', '{', '[' have parity in a string.
+inline bool has_parity(const std::string &str, const char opening='(') {
+    if (str.empty()) {
+        return false;
+    }
+    char closing;
+    switch (opening) {
+        case '(':
+            closing = ')';
+            break;
+        case '{':
+            closing = '}';
+            break;
+        case '[':
+            closing = ']';
+            break;
+        default:
+            closing = ')';
+            break;
+    }
+
+    int opening_count = 0;
+    int closing_count = 0;
+
+    for (int i = 0; i <= str.length()-1; i++) {
+        if (str[i] == opening) {
+            opening_count++;
+        }
+        if (str[i] == closing) {
+            closing_count++;
+        }
+    }
+    if (opening_count == closing_count) {
+        return true;
+    }
+    return false;
+}
+
 // Returns integer representation of a char.
 inline int char_to_int(const char c) {
     std::map<char, int> nums = {
@@ -130,12 +168,14 @@ inline int char_to_int(const char c) {
         {'8', 8},
         {'9', 9}
     };
-    const int n = nums[c];
-    return n;
+    return nums[c];
 }
 
 // Capitalizes a char. Accepts type char; returns type char.
 inline char capchar(const char character) {
+    if (character == ' ') {
+        return character;
+    }
     for (int i = 0; i <= 25; i++) {
         constexpr std::array<char, 26> lowercase_chars = {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -148,6 +188,28 @@ inline char capchar(const char character) {
                 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
             };
             return uppercase_chars[i];
+        }
+    }
+    return character;
+}
+
+// Lowercases a char.
+inline char lowchar(const char character) {
+    if (character == ' ') {
+        return character;
+    }
+    for (int i = 0; i <= 25; i++) {
+        constexpr std::array<char, 26> uppercase_chars = {
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        };
+
+        if (character == uppercase_chars[i]) {
+            constexpr std::array<char, 26> lowercase_chars = {
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+            };
+            return lowercase_chars[i];
         }
     }
     return character;
@@ -201,23 +263,106 @@ inline std::string capitalize(std::string str) {
     return str;
 }
 
-// Uppercases entire string. Accepts string; returns type string.
-inline std::string uppercase(std::string str) {
+// Uppercases entire string.
+inline std::string uppercase(const std::string &str) {
     std::string new_str;
-
-    // For every character in input string, add corresponding uppercase character to an empty string.
-    // Once the for loop ends, return the new string.
-    for (int i = 0; i <= str.length(); i++) {
+    for (int i = 0; i <= str.length()-1; i++) {
         new_str += capchar(str[i]);
-        if (i == str.length()) {
-            return new_str;
-        }
-        if (i == str.length() && new_str.empty()) {
-            break;
+    }
+    return new_str;
+}
+
+// Lowercases entire string.
+inline std::string lowercase(const std::string &str) {
+    std::string new_str;
+    for (int i = 0; i <= str.length()-1; i++) {
+        new_str += lowchar(str[i]);
+    }
+    return new_str;
+}
+
+// Tranforms a string to a title
+inline std::string title(const std::string &str) {
+    std::string new_str = lowercase(str);
+    new_str[0] = capchar(new_str[0]);
+    for (int i = 1; i <= new_str.length()-2; i++) {
+        if (new_str[i] == ' ' || new_str[i] == '-') {
+            new_str[i+1] = capchar(new_str[i+1]);
         }
     }
-    // If no chars can be capitalized, return the original string.
-    return str;
+    return new_str;
+}
+
+// Trandsforms a string to camel case (lower).
+inline std::string camel_case(const std::string &str) {
+    std::string new_str = lowercase(str);
+    for (int i = 0; i <= new_str.length()-2; i++) {
+        if (new_str[i] == ' ') {
+            new_str[i+1] = capchar(new_str[i+1]);
+            new_str.erase(i, 1);
+            i--;
+        }
+    }
+    return new_str;
+}
+
+// Transforsm a string to upper camel case aka pascal case
+inline std::string pascal_case(const std::string &str) {
+    std::string new_str = lowercase(str);
+    new_str[0] = capchar(new_str[0]);
+    for (int i = 0; i <= new_str.length()-2; i++) {
+        if (new_str[i] == ' ') {
+            new_str[i+1] = capchar(new_str[i+1]);
+            new_str.erase(i, 1);
+            i--;
+        }
+    }
+    return new_str;
+}
+
+// Transforms string to snake case
+inline std::string snake_case(const std::string &str) {
+    std::string new_str = lowercase(str);
+    for (int i = 0; i <= new_str.length()-1; i++) {
+        if (new_str[i] == ' ') {
+            new_str[i] = '_';
+        }
+    }
+    return new_str;
+}
+
+// Transforms string to upper snake case aka screaming snake case
+inline std::string screaming_snake_case(const std::string &str) {
+    std::string new_str = uppercase(str);
+    for (int i = 0; i <= new_str.length()-1; i++) {
+        if (new_str[i] == ' ') {
+            new_str[i] = '_';
+        }
+    }
+    return new_str;
+}
+
+// Tansforms a string to kebab case
+inline std::string kebab_case(const std::string &str) {
+    std::string new_str = lowercase(str);
+    for (int i = 0; i <= new_str.length()-1; i++) {
+        if (new_str[i] == ' ') {
+            new_str[i] = '-';
+        }
+    }
+    return new_str;
+}
+
+// Transforms a string to camel snake case
+inline std::string camel_snake_case(const std::string &str) {
+    std::string new_str = lowercase(str);
+    for (int i = 0; i <= new_str.length()-2; i++) {
+        if (new_str[i] == ' ') {
+            new_str[i] = '_';
+            new_str[i+1] = capchar(new_str[i+1]);
+        }
+    }
+    return new_str;
 }
 
 // Converts a named number ('Zero', 'Seven', etc.) into its integer representation. Accepts string; returns int.
@@ -439,6 +584,29 @@ inline std::string filter_slice(const std::string &str, const bool condition, in
     return new_str;
 }
 
+// Replace all substring occurrences with another substring
+inline std::string replace_substring(const std::string &str, const std::string &target, const std::string &replacement) {
+    std::string new_str = str;
+    if (str.empty()) {
+        return new_str;
+    }
+    if (!has_substring(str, target)) {
+        return new_str;
+    }
+    // If a char matches first char of target, slice string at that point and compare substrings directly
+    for (int i = 0; i <= str.length()-1; i++) {
+        std::string temp;
+        if (str[i] == target.front()) {
+            temp = slice(str, i, i+target.length()-1);
+            if (temp == target) {
+                new_str.erase(i, temp.length());
+                new_str.insert(i, replacement);
+            }
+        }
+    }
+    return new_str;
+}
+
 // Helper function to rearrange a string for a given permutation of a string.
 // Takes string, storage vector, and optional starting position (defaults to 0).
 inline void permute(const std::string &str, std::vector<std::string> &output, const int pos=0) {
@@ -448,7 +616,7 @@ inline void permute(const std::string &str, std::vector<std::string> &output, co
         return;
     }
     // Recursive loop calls function until i reaches string bounds.
-    for (int i = pos; i < str.length(); i++) {
+    for (int i = pos; i <= str.length()-1; i++) {
         std::string new_str = rearrange(str, pos, i);
         permute(new_str, output, pos + 1);
     }
@@ -459,7 +627,7 @@ inline std::vector<std::string> permutations(const std::string &str) {
     std::vector<std::string> permutations;
     // Call to permute function to store permutations in the vector
     permute(str, permutations);
-    // Should return a vector with size of factorial str.size()
+    // Should return a vector with size of factorial str.length()
     return permutations;
 }
 
@@ -468,9 +636,9 @@ inline bool is_palindrome(const std::string &str) {
     if (str.empty() || str.length() == 1) {
         return false;
     }
-    const std::string reversed = reverse(str);
+    const std::string reversed = lowercase(reverse(str));
     for (int i = 0; i <= str.length()-1; i++) {
-        if (str[i] != reversed[i]) {
+        if (lowchar(str[i]) != reversed[i]) {
             return false;
         }
     }
@@ -482,22 +650,88 @@ inline bool is_pangram(const std::string &str) {
     if (str.empty() || str.length() == 1) {
         return false;
     }
-    std::vector<char> letters = {
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-    };
-    for (int i = 0; i <= str.length()-1; i++) {
-        for (int j = 0; j <= letters.size()-1; j++) {
-            if (capchar(str[i]) == letters[j]) {
-                letters.erase(letters.begin() + j);
-                j--;
+    if (str.length() < 26) {
+        return false;
+    }
+    std::array<bool, 26> checks;
+
+    // If char at index j matches letters element, set checks bool at index i to true.
+    for (int i = 0; i <= checks.size()-1; i++) {
+        for (int j = 0; j <= str.length()-1; j++) {
+            constexpr std::array<char, 26> letters = {
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+            };
+            if (capchar(str[j]) == letters[i]) {
+                checks[i] = true;
             }
         }
     }
-    if (letters.empty()) {
-        return true;
+
+    // If any checks element is false, return false
+    for (int k = 0; k <= checks.size()-1; k++) {
+        if (checks[k] == false) {
+            return false;
+        }
     }
-    return false;
+    return true;
+}
+
+// Checks whether two strings are anagrams
+inline bool is_anagram(const std::string &str_1, const std::string &str_2) {
+    if (str_1.empty() || str_2.empty() || str_1.length() != str_2.length()) {
+        return false;
+    }
+    if (str_1 == str_2) {
+        return false;
+    }
+    if (str_1.length() == 1 || str_2.length() == 1) {
+        return false;
+    }
+    std::vector<char> temp;
+    for (int i = 0; i <= str_1.length()-1; i++) {
+        temp.push_back(str_1[i]);
+    }
+    for (int j = 0; j <= str_2.length()-1; j++) {
+        if (!contains(str_2, temp[j])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Returns a string with n number of string repetitions
+inline std::string repeat(const std::string &str, int n=2) {
+    std::string new_str;
+    for (; n > 0; n--) {
+        new_str += str;
+    }
+    return new_str;
+}
+
+// Returns a string with n number of string repetitions, separated by whitespace or specified char
+inline std::string repeat_separated(const std::string &str, int n=2, const char separator=' ') {
+    std::string new_str;
+    for (; n > 0; n--) {
+        new_str += str + separator;
+    }
+    return new_str;
+}
+
+// Replaces all but last 4 chars with asterisks or specified char
+inline std::string mask_string(const std::string &str, const char censor='*') {
+    std::string new_str;
+    if (str.length() <= 4) {
+        new_str = str;
+        std::cerr << "mask_string() must take a string greater than 4 characters in length.";
+        return new_str;
+    }
+    new_str = str;
+    // Minus 5 here for index bounds plus last 4 chars restriction
+    for (int i = 0; i <= str.length()-5; i++) {
+        new_str[i] = censor;
+    }
+    return new_str;
 }
 
 

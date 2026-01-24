@@ -36,6 +36,31 @@ inline int bool_to_int(const bool value) {
     return 0;
 }
 
+// Returns 'y' for true and 'n' for false. Uppercase optional.
+inline char bool_to_char(const bool value, const bool is_uppercase=false) {
+    if (is_uppercase == true) {
+        if (value == true) {
+            return 'Y';
+        }
+        return 'N';
+    }
+    if (value == true) {
+        return 'y';
+    }
+    return 'n';
+}
+
+// Transforms (y/n) -> (true/false)
+inline bool char_to_bool(const char c) {
+    if (c == 'y' || c == 'Y') {
+        return true;
+    }
+    if (c == 'n' || c == 'N') {
+        return false;
+    }
+    return false;
+}
+
 // Returns true if two booleans are equal, or false if not.
 inline bool bool_equal(const bool bool_1, const bool bool_2) {
     if (bool_1 == bool_2) {
