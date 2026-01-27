@@ -3,18 +3,44 @@
 #include <string>
 #include <vector>
 
-// Function to 'flip' the value of a boolean.
-inline void toggle(bool value) {
+// Returns the opposite of the given boolean.
+inline bool toggle(const bool value) {
     if (value == true) {
-        value = false;
-    } else if (value == false) {
-        value = true;
+        return false;
     }
+    return true;
 }
 
 // Returns true if two boolean values are different. If not, returns false.
 inline bool bool_xor(const bool bool_1, const bool bool_2) {
     if (bool_1 != bool_2) {
+        return true;
+    }
+    return false;
+}
+
+// Returns true if two boolean values are false. If not, returns false.
+inline bool bool_nor(const bool bool_1, const bool bool_2) {
+    if (bool_1 == false && bool_2 == false) {
+        return true;
+    }
+    return false;
+}
+
+// Returns true if any boolean value is false. Else, return false.
+inline bool bool_nand(const bool bool_1, const bool bool_2) {
+    if (bool_1 == false || bool_2 == false) {
+        return true;
+    }
+    return false;
+}
+
+// Returns true if both values are true or both values are false.
+inline bool bool_xnor(const bool bool_1, const bool bool_2) {
+    if (bool_1 == true && bool_2 == true) {
+        return true;
+    }
+    if (bool_1 == false && bool_2 == false) {
         return true;
     }
     return false;
@@ -141,6 +167,39 @@ inline std::vector<bool> most_true(std::vector<bool> vec_1, std::vector<bool> ve
         return vec_2;
     }
     return vec_1;
+}
+
+// Returns true if all elements in bool vector are false
+inline bool all_false(const std::vector<bool> &booleans) {
+    if (booleans.empty()) {
+        return false;
+    }
+    if (const int falses = count_falses(booleans); falses == booleans.size()) {
+        return true;
+    }
+    return false;
+}
+
+// Returns true if any elements in bool vector are false
+inline bool any_false(const std::vector<bool> &booleans) {
+    if (booleans.empty()) {
+        return false;
+    }
+    if (const int falses = count_falses(booleans); falses > 0) {
+        return true;
+    }
+    return false;
+}
+
+// Returns true if none of the elements in a bool vector are false
+inline bool none_false(const std::vector<bool> &booleans) {
+    if (booleans.empty()) {
+        return false;
+    }
+    if (const int falses = count_falses(booleans); falses > 0) {
+        return false;
+    }
+    return true;
 }
 
 // Returns bool vector with most elements set to 'false'

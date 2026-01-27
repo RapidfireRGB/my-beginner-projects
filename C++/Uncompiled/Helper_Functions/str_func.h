@@ -40,6 +40,34 @@ inline bool contains(const std::string &str, const char character) {
     return false;
 }
 
+// Checks whether a char is uppercased.
+inline bool char_is_upper(const char character) {
+    constexpr std::array<char, 26> lower = {
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+    };
+    for (int i = 0; i <= lower.size()-1; i++) {
+        if (character == lower[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Checks whether a char is lowercased.
+inline bool char_is_lower(const char character) {
+    constexpr std::array<char, 26> upper = {
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    };
+    for (int i = 0; i <= upper.size()-1; i++) {
+        if (character == upper[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Strip whitespace out of a string. Returns a substring.
 inline std::string strip(const std::string &str) {
     // Return an empty string if original string is empty.
@@ -87,8 +115,11 @@ inline std::string shortest(std::string str_1, std::string str_2) {
 // Returns a reversed string.
 inline std::string reverse(const std::string &str) {
     std::string new_str;
-    for (int i = str.length() - 1, loops = 0; i >= 0; i--, loops++) {
+    for (size_t i = str.length() - 1, loops = 0; i > 0; i--, loops++) {
         new_str.insert(loops, 1, str[i]);
+        if (i - 1 == 0) {
+            new_str += str[0];
+        }
     }
     return new_str;
 }
@@ -545,38 +576,38 @@ inline std::string filter(const std::string &str, const bool condition) {
 }
 
 // Returns a sliced substring given two index positions.
-inline std::string slice(const std::string &str, int pos_1, int pos_2) {
+inline std::string slice(const std::string &str, size_t pos_1, size_t pos_2) {
     std::string new_str;
     if (str.empty()) {
         return new_str;
     }
     // Bounds checking.
-    if (pos_1 < 0) {
-        pos_1 = 0;
+    if (pos_1 > pos_2) {
+        pos_1 = pos_2-1;
     }
     if (pos_2 > str.size()-1) {
         pos_2 = str.size()-1;
     }
-    for (int i = pos_1; i <= pos_2; i++) {
+    for (size_t i = pos_1; i <= pos_2; i++) {
         new_str += str[i];
     }
     return new_str;
 }
 
 // Returns a sliced, filtered substring given two index positions and a condition.
-inline std::string filter_slice(const std::string &str, const bool condition, int pos_1, int pos_2) {
+inline std::string filter_slice(const std::string &str, const bool condition, size_t pos_1, size_t pos_2) {
     std::string new_str;
     if (str.empty()) {
         return new_str;
     }
     // Bounds Checking.
-    if (pos_1 < 0) {
-        pos_1 = 0;
+    if (pos_1 > pos_2) {
+        pos_1 = pos_2-1;
     }
     if (pos_2 > str.size()-1) {
         pos_2 = str.size()-1;
     }
-    for (int i = pos_1; i <= pos_2; i++) {
+    for (size_t i = pos_1; i <= pos_2; i++) {
         if (condition == true) {
             new_str += str[i];
         }
@@ -595,8 +626,8 @@ inline std::string replace_substring(const std::string &str, const std::string &
     }
     // If a char matches first char of target, slice string at that point and compare substrings directly
     for (int i = 0; i <= str.length()-1; i++) {
-        std::string temp;
         if (str[i] == target.front()) {
+            std::string temp;
             temp = slice(str, i, i+target.length()-1);
             if (temp == target) {
                 new_str.erase(i, temp.length());
@@ -615,7 +646,7 @@ inline void permute(const std::string &str, std::vector<std::string> &output, co
         output.push_back(str);
         return;
     }
-    // Recursive loop calls function until i reaches string bounds.
+    // Recursive loop calls function until iterator reaches string bounds.
     for (int i = pos; i <= str.length()-1; i++) {
         std::string new_str = rearrange(str, pos, i);
         permute(new_str, output, pos + 1);
@@ -653,7 +684,11 @@ inline bool is_pangram(const std::string &str) {
     if (str.length() < 26) {
         return false;
     }
-    std::array<bool, 26> checks;
+    std::array<bool, 26> checks = {
+        false, false, false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false, false, false,
+        false, false
+    };
 
     // If char at index j matches letters element, set checks bool at index i to true.
     for (int i = 0; i <= checks.size()-1; i++) {
@@ -730,6 +765,50 @@ inline std::string mask_string(const std::string &str, const char censor='*') {
     // Minus 5 here for index bounds plus last 4 chars restriction
     for (int i = 0; i <= str.length()-5; i++) {
         new_str[i] = censor;
+    }
+    return new_str;
+}
+
+// Shifts a string by n number of alphabet positions (Caesar Cipher)
+inline std::string caesar_shift(const std::string &str, const int n) {
+    std::string new_str;
+    if (str.empty()) {
+        return new_str;
+    }
+    new_str = str;
+    constexpr std::array<char, 26> alphabet_upper = {
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    };
+
+    constexpr int index_bounds = alphabet_upper.size()-1;
+
+    for (int i = 0; i <= new_str.length()-1; i++) {
+
+        if (char_is_upper(new_str[i])) {
+
+            if ((i+n) <= index_bounds) {
+                new_str[i] = alphabet_upper[i+n];
+            } else {
+                int overflow = (i + n) - index_bounds;
+                new_str[i] = alphabet_upper[overflow];
+            }
+
+        } else if (char_is_lower(new_str[i])) {
+            constexpr std::array<char, 26> alphabet_lower = {
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+            };
+            if ((i+n) <= index_bounds) {
+                new_str[i] = alphabet_lower[i+n];
+            } else {
+                int overflow = (i + n) - index_bounds;
+                new_str[i] = alphabet_lower[overflow];
+            }
+
+        } else {
+            new_str[i] = new_str[i];
+        }
     }
     return new_str;
 }

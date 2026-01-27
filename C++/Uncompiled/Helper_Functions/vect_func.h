@@ -23,7 +23,7 @@ void printbr_vec(std::vector<T> range) {
         return;
     }
     for (int i = 0; i <= range.size()-1; i++) {
-        std::cout << range[i] << "\n";
+        std::cout << range[i] << '\n';
     }
 }
 

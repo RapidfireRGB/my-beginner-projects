@@ -70,7 +70,7 @@ int sign(const T n) {
     if (n < 0) {
         return -1;
     }
-    // Defaults to returning zero.
+    // Defaults to returning zero if n is NaN or cannot be compared.
     return 0;
 }
 
@@ -210,15 +210,15 @@ N clamp_int(const T &container, const N n) {
     return 0;
 }
 
-// Returns the number of digits in an integer.
-inline int count_digits_int(const int n) {
+// Returns type size_t of the number of digits in an integer.
+inline size_t count_digits_int(const int n) {
     const std::string n_string = std::to_string(n);
     return n_string.length();
 }
 
-// Returns the number of digits in a floating point number.
-template <typename F>
-int count_digits_flt(const F n) {
+// Returns type size_t of the number of digits in a floating point number.
+template <typename Floating>
+size_t count_digits_flt(const Floating n) {
     std::string n_string = std::to_string(n);
     n_string.erase(n_string.find('.'), 1);
     return n_string.length();
@@ -346,6 +346,5 @@ inline std::vector<int> reverse_sequence(const int n) {
     }
     return sequenced_ints;
 }
-
 
 #endif //HELPERFUNCTIONS_NUM_FUNC_H

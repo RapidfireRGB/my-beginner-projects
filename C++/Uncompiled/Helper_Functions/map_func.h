@@ -6,42 +6,42 @@
 #include <utility>
 #include <string>
 
-// Prints contents of a map preserving the {x, y} notation
+// Prints contents of a map preserving the {key, value} notation
 template <typename K, typename V>
-void print_map(std::map<K, V> map) {
+void print_map(const std::map<K, V> &map) {
     if (map.empty()) {
         return;
     }
     for (auto const& [key, value] : map) {
-        std::cout << '{' << map[key] << ", " << map[value] << '}';
+        std::cout << '{' << key << ", " << value << '}';
     }
 }
 
 // Prints contents of a map separated by linebreaks.
 template <typename K, typename V>
-void printbr_map(std::map<K, V> map) {
+void printbr_map(const std::map<K, V> &map) {
     if (map.empty()) {
         return;
     }
     for (auto const& [key, value] : map) {
-        std::cout << '{' << map[key] << ", " << map[value] << '}' << "\n";
+        std::cout << '{' << key << ", " << value << '}' << '\n';
     }
 }
 
 // Prints contents of a map separated by n number of whitespaces (default n=4)
 template <typename K, typename V>
-void printtab_map(std::map<K, V> map, const short n=4) {
+void printtab_map(const std::map<K, V> &map, const short n=4) {
     if (map.empty()) {
         return;
     }
     for (auto const& [key, value] : map) {
-        std::cout << '{' << map[key] << ", " << map[value] << '}' << std::string(n, ' ');
+        std::cout << '{' << key << ", " << value << '}' << std::string(n, ' ');
     }
 }
 
 // Returns true if a key exists. Else, return false.
 template <typename K, typename V>
-bool contains_key(const std::map<K, V> map, const K key) {
+bool contains_key(const std::map<K, V> &map, const K key) {
     if (map.empty()) {
         return false;
     }
@@ -64,15 +64,15 @@ void insert_if(std::map<K, V> map, K key, V value, const bool condition) {
     }
 }
 
-// Slices a map between two key bounds and returns a sub map.
+// Slices a map between two key position bounds and returns a sub map.
 template <typename K, typename V>
-std::map<K, V> slice(std::map<K, V> map, K key_1, K key_2) {
+std::map<K, V> slice(const std::map<K, V> &map, K key_1, K key_2) {
     std::map<K, V> new_map;
     if (map.empty()) {
         return new_map;
     }
     // Bounds checking.
-    if (!contains(map, key_1) || !contains(map, key_2)) {
+    if (!contains_key(map, key_1) || !contains_key(map, key_2)) {
         return new_map;
     }
     // Loops between bounds and inserts {key, value} to new map.
@@ -84,7 +84,7 @@ std::map<K, V> slice(std::map<K, V> map, K key_1, K key_2) {
 
 // Returns a sub map with filtered elements based on a given condition.
 template <typename K, typename V>
-std::map<K, V> filter(std::map<K, V> map, const bool condition) {
+std::map<K, V> filter(const std::map<K, V> &map, const bool condition) {
     std::map<K, V> new_map;
     if (map.empty()) {
         return new_map;
@@ -163,13 +163,14 @@ V get_value_or(const std::map<K, V> &map, const K key, const V default_value) {
     if (!contains_key(map, key)) {
         return default_value;
     }
-    return map[key];
+    V value = map.at(key);
+    return value;
 }
 
 // TODO handle non numerical elements here.
 // Returns lowest value in a map
 template <typename K, typename V>
-V min(std::map<K, V> map) {
+V min(const std::map<K, V> &map) {
     if (map.empty()) {
         return 0;
     }
@@ -187,7 +188,7 @@ V min(std::map<K, V> map) {
 
 // Returns highest value in a map
 template <typename K, typename V>
-V max(std::map<K, V> map) {
+V max(const std::map<K, V> &map) {
     if (map.empty()) {
         return 0;
     }
