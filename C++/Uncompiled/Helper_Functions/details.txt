@@ -4,7 +4,8 @@ Basic Types
   str_func.h: Basic string manipulation such as slicing and re-arranging.
   num_func.h: Arithmetic and Comparison such as sum, mean, and is prime.
   bool_func.h: Boolean transformations such as to integer or string; bool vector manipulation such as counting # of true/false
-  array_func.h: Takes pointer of first element and array size as parameters for functions. Not yet tested. Includes sorting, element-wise reversal, and index fetching.
+  array_func.h: Takes pointer of first element and array size as parameters for functions. Includes sorting, element-wise reversal, and index fetching.
+  ptr_func.h: Pointer related functions will be written there.
 
 Container Types
   vect_func.h: Vector manipulation such as reversal, slicing, filtering; transformations such as char to int, and char to string literal.
