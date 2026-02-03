@@ -11,7 +11,7 @@ void print_vec(std::vector<T> range) {
     if (range.empty()) {
         return;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         std::cout << range[i];
     }
 }
@@ -22,7 +22,7 @@ void printbr_vec(std::vector<T> range) {
     if (range.empty()) {
         return;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         std::cout << range[i] << '\n';
     }
 }
@@ -33,7 +33,7 @@ void printtab_vec(std::vector<T> range, const short n=4) {
     if (range.empty()) {
         return;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         std::cout << range[i] << std::string(n, ' ');
     }
 }
@@ -51,7 +51,7 @@ std::vector<T> add(const std::vector<T> &range_1, const std::vector<T> &range_2)
     } else {
         end = range_2.size()-1;
     }
-    for (int i = 0; i <= end; i++) {
+    for (size_t i = 0; i <= end; i++) {
         new_vec.push_back(range_1[i] + range_2[i]);
     }
     return new_vec;
@@ -64,9 +64,11 @@ std::vector<T> reverse(const std::vector<T> &range) {
     if (range.empty()) {
         return new_vec;
     }
-    for (int i = range.size()-1; i >= 0; --i) {
+    new_vec.reserve(range.size());
+    for (size_t i = range.size()-1; i > 0; --i) {
         new_vec.push_back(range[i]);
     }
+    new_vec.push_back(range[0]);
     return new_vec;
 }
 
@@ -77,7 +79,8 @@ std::vector<T> indices(const std::vector<T> &range, const T element) {
     if (range.empty()) {
         return new_vec;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    new_vec.reserve(range.size()-1);
+    for (size_t i = 0; i <= range.size()-1; i++) {
         if (range[i] == element) {
             new_vec.push_back(i);
         }
@@ -92,7 +95,7 @@ int quantity(const std::vector<T> &range, T element) {
         return 0;
     }
     int quantity = 0;
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         if (range[i] == element) {
             quantity++;
         }
@@ -106,7 +109,7 @@ bool contains(const std::vector<T> &range, const T element) {
     if (range.empty()) {
         return false;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         if (range[i] == element) {
             return true;
         }
@@ -145,7 +148,7 @@ int count_unique(const std::vector<T> &range) {
         return 0;
     }
     int count = 0;
-    for (int i = 1; i <= range.size()-1; i++) {
+    for (size_t i = 1; i <= range.size()-1; i++) {
         if (quantity(range, range[i]) == 1) {
             count++;
         }
@@ -160,7 +163,7 @@ int count_duplicate(const std::vector<T> &range) {
         return 0;
     }
     int count = 0;
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         if (quantity(range, range[i]) > 1) {
             count++;
         }
@@ -175,8 +178,9 @@ std::vector<T> unique(const std::vector<T> &range) {
     if (range.empty()) {
         return new_vec;
     }
+    new_vec.reserve(range.size());
     new_vec.push_back(range[0]);
-    for (int i = 1; i <= range.size()-1; i++) {
+    for (size_t i = 1; i <= range.size()-1; i++) {
         if (!contains(new_vec, range[i])) {
             new_vec.push_back(range[i]);
         }
@@ -186,7 +190,7 @@ std::vector<T> unique(const std::vector<T> &range) {
 
 // Return a sub vector between two index positions.
 template <typename T>
-std::vector<T> slice(const std::vector<T> &range, int pos_1, int pos_2) {
+std::vector<T> slice(const std::vector<T> &range, size_t pos_1, size_t pos_2) {
     std::vector<T> new_vec;
     if (range.empty()) {
         return new_vec;
@@ -198,7 +202,11 @@ std::vector<T> slice(const std::vector<T> &range, int pos_1, int pos_2) {
     if (pos_2 > range.size()-1) {
         pos_2 = range.size()-1;
     }
-    for (int i = pos_1; i <= pos_2; i++) {
+    if (pos_1 > pos_2) {
+        pos_1 = pos_2-1;
+    }
+    new_vec.reserve(pos_2-pos_1);
+    for (size_t i = pos_1; i <= pos_2; i++) {
         new_vec.push_back(range[i]);
     }
     return new_vec;
@@ -211,7 +219,8 @@ std::vector<T> filter(const std::vector<T> &range, const bool condition) {
     if (range.empty()) {
         return new_vec;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    new_vec.reserve(range.size());
+    for (size_t i = 0; i <= range.size()-1; i++) {
          if (condition == true) {
              new_vec.push_back(range[i]);
          }
@@ -221,7 +230,7 @@ std::vector<T> filter(const std::vector<T> &range, const bool condition) {
 
 // Return a sub vector containing elements which satisfy a condition between two index positions.
 template <typename T>
-std::vector<T> filter_slice(const std::vector<T> &range, const bool condition, int pos_1, int pos_2) {
+std::vector<T> filter_slice(const std::vector<T> &range, const bool condition, size_t pos_1, size_t pos_2) {
     std::vector<T> new_vec;
     if (range.empty()) {
         return new_vec;
@@ -232,7 +241,11 @@ std::vector<T> filter_slice(const std::vector<T> &range, const bool condition, i
     if (pos_2 > range.size()-1) {
         pos_2 = range.size()-1;
     }
-    for (int i = pos_1; i <= pos_2; i++) {
+    if (pos_1 > pos_2) {
+        pos_1 = pos_2-1;
+    }
+    new_vec.reserve(pos_2-pos_1);
+    for (size_t i = pos_1; i <= pos_2; i++) {
         if (condition == true) {
             new_vec.push_back(range[i]);
         }
@@ -243,7 +256,7 @@ std::vector<T> filter_slice(const std::vector<T> &range, const bool condition, i
 // Fills vector with a specified value.
 template <typename T>
 void fill(std::vector<T> range, T value) {
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         range[i] = value;
     }
 }
@@ -251,7 +264,7 @@ void fill(std::vector<T> range, T value) {
 // Fills vector with value if condition is met.
 template <typename T>
 void fill_if(std::vector<T> range, T value, const bool condition) {
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         if (condition == true) {
             range[i] = value;
         }
@@ -267,7 +280,7 @@ void fill_between(std::vector<T> range, T value, int pos_1, int pos_2) {
     if (pos_2 > range.size()-1) {
         pos_2 = range.size()-1;
     }
-    for (int i = pos_1; i <= pos_2; i++) {
+    for (size_t i = pos_1; i <= pos_2; i++) {
         range[i] = value;
     }
 }
@@ -278,10 +291,10 @@ void erase_all_of(std::vector<T> range, T element) {
     if (range.empty()) {
         return;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         if (range[i] == element) {
             range.erase(range[i]);
-            i--;
+            i -= 2;
         }
     }
 }
@@ -292,10 +305,10 @@ void reduce(std::vector<T> range) {
     if (range.empty()) {
         return;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         if (!is_unique(range, range[i])) {
             range.erase(range[i]);
-            i--;
+            i -= 2;
         }
     }
 }
@@ -307,7 +320,8 @@ inline std::vector<bool> vec_int_to_bool(const std::vector<int> &range) {
     if (range.empty()) {
         return booleans;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    booleans.reserve(range.size());
+    for (size_t i = 0; i <= range.size()-1; i++) {
         if (range[i] == 1) {
             booleans.push_back(true);
         }
@@ -325,7 +339,8 @@ inline std::vector<int> vec_bool_to_int(const std::vector<bool> &booleans) {
     if (booleans.empty()) {
         return new_vec;
     }
-    for (int i = 0; i <= booleans.size(); i++) {
+    new_vec.reserve(booleans.size());
+    for (size_t i = 0; i <= booleans.size(); i++) {
         if (booleans[i] == true) {
             new_vec.push_back(1);
         }
@@ -354,7 +369,8 @@ inline std::vector<int> vec_char_to_int(const std::vector<char> &chars) {
         {'8', 8},
         {'9', 9}
     };
-    for (int i = 0; i <= chars.size()-1; i++) {
+    new_vec.reserve(chars.size());
+    for (size_t i = 0; i <= chars.size()-1; i++) {
         new_vec.push_back(conversion[chars[i]]);
     }
     return new_vec;
@@ -367,7 +383,7 @@ std::map<T, int> frequency(const std::vector<T> &range) {
     if (range.empty()) {
         return new_map;
     }
-    for (int i = 0; i <= range.size()-1; i++) {
+    for (size_t i = 0; i <= range.size()-1; i++) {
         new_map.insert(range[i], indices(range, range[i]).size());
     }
     return new_map;
@@ -382,7 +398,7 @@ bool is_sorted_asc(const std::vector<T> &range) {
     if (range.size() == 1) {
         return true;
     }
-    for (int i = 0; i < range.size()-1; i++) {
+    for (size_t i = 0; i < range.size()-1; i++) {
         if (range[i] > range[i+1]) {
             return false;
         }
@@ -399,7 +415,7 @@ bool is_sorted_desc(const std::vector<T> &range) {
     if (range.size() == 1) {
         return true;
     }
-    for (int i = 0; i < range.size()-1; i++) {
+    for (size_t i = 0; i < range.size()-1; i++) {
         if (range[i] < range[i+1]) {
             return false;
         }
@@ -415,12 +431,49 @@ inline bool is_sorted_alph(const std::vector<std::string> &str) {
     if (str.size() == 1) {
         return true;
     }
-    for (int i = 0; i < str.size()-1; i++) {
+    for (size_t i = 0; i < str.size()-1; i++) {
         if (str[i] > str[i+1]) {
             return false;
         }
     }
     return true;
 }
+
+// Returns a 2d vector (same elements) given a vector.
+template <typename T>
+std::vector<std::vector<T>> make_2d(const std::vector<T> &range) {
+    std::vector<std::vector<T>> new_vec;
+    if (range.empty()) {
+        return new_vec;
+    }
+    new_vec.reserve(range.size() * range.size());
+    for (size_t i = 0; i <= range.size()-1; i++) {
+        new_vec[0][i] = range[i];
+    }
+    for (size_t j = 0; j <= range.size()-1; j++) {
+        new_vec[j][0] = range[j];
+    }
+    return new_vec;
+}
+
+// Returns the difference between capacity and current size of a vector.
+template <typename T>
+size_t unused_elements(const std::vector<T>& vec) {
+    if (vec.empty()) {
+        return 0;
+    }
+    const size_t difference = vec.capacity() - vec.size();;
+    return difference;
+}
+
+// Returns true if a vector's current size is at capacity
+template <typename T>
+bool is_full(const std::vector<T>& vec) {
+    if (vec.empty()) {
+        return false;
+    }
+    return vec.size() == vec.capacity();
+}
+
 
 #endif //HELPERFUNCTIONS_VECT_FUNC_H

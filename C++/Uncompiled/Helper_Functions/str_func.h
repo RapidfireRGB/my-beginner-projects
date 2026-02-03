@@ -46,7 +46,7 @@ inline bool char_is_upper(const char character) {
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
     };
-    for (int i = 0; i <= lower.size()-1; i++) {
+    for (size_t i = 0; i <= lower.size()-1; i++) {
         if (character == lower[i]) {
             return false;
         }
@@ -60,7 +60,7 @@ inline bool char_is_lower(const char character) {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     };
-    for (int i = 0; i <= upper.size()-1; i++) {
+    for (size_t i = 0; i <= upper.size()-1; i++) {
         if (character == upper[i]) {
             return false;
         }
@@ -75,7 +75,7 @@ inline std::string strip(const std::string &str) {
         return "";
     }
     std::string new_str = str;
-    for (int i = 0; i <= str.size()-1; i++) {
+    for (size_t i = 0; i <= str.size()-1; i++) {
         if (str[i] == ' ') {
             new_str.erase(i, 1);
             i--;
@@ -139,7 +139,7 @@ inline bool has_substring(const std::string &str, const std::string &substr) {
     if (str == substr) {
         return true;
     }
-    for (int i = 0; i <= substr.length()-1; i++) {
+    for (size_t i = 0; i <= substr.length()-1; i++) {
         if (str.find(substr[i]) == std::string::npos) {
             return false;
         }
@@ -171,7 +171,7 @@ inline bool has_parity(const std::string &str, const char opening='(') {
     int opening_count = 0;
     int closing_count = 0;
 
-    for (int i = 0; i <= str.length()-1; i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         if (str[i] == opening) {
             opening_count++;
         }
@@ -207,7 +207,7 @@ inline char capchar(const char character) {
     if (character == ' ') {
         return character;
     }
-    for (int i = 0; i <= 25; i++) {
+    for (size_t i = 0; i <= 25; i++) {
         constexpr std::array<char, 26> lowercase_chars = {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
@@ -229,7 +229,7 @@ inline char lowchar(const char character) {
     if (character == ' ') {
         return character;
     }
-    for (int i = 0; i <= 25; i++) {
+    for (size_t i = 0; i <= 25; i++) {
         constexpr std::array<char, 26> uppercase_chars = {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
@@ -248,7 +248,7 @@ inline char lowchar(const char character) {
 
 // Checks if the first character of a string is capitalized. Accepts string; returns type bool.
 inline bool is_capitalized(const std::string &str) {
-    for (int i = 0; i <= 25; i++) {
+    for (size_t i = 0; i <= 25; i++) {
         constexpr std::array<char, 26> uppercase_chars = {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
@@ -264,7 +264,7 @@ inline bool is_capitalized(const std::string &str) {
 inline std::string capitalize(std::string str) {
     if (str.empty()) return str;
 
-    for (int i = 0; i <= 25; i++) {
+    for (size_t i = 0; i <= 25; i++) {
         constexpr std::array<char, 26> lowercase_chars = {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
@@ -297,7 +297,7 @@ inline std::string capitalize(std::string str) {
 // Uppercases entire string.
 inline std::string uppercase(const std::string &str) {
     std::string new_str;
-    for (int i = 0; i <= str.length()-1; i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         new_str += capchar(str[i]);
     }
     return new_str;
@@ -306,7 +306,7 @@ inline std::string uppercase(const std::string &str) {
 // Lowercases entire string.
 inline std::string lowercase(const std::string &str) {
     std::string new_str;
-    for (int i = 0; i <= str.length()-1; i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         new_str += lowchar(str[i]);
     }
     return new_str;
@@ -316,7 +316,7 @@ inline std::string lowercase(const std::string &str) {
 inline std::string title(const std::string &str) {
     std::string new_str = lowercase(str);
     new_str[0] = capchar(new_str[0]);
-    for (int i = 1; i <= new_str.length()-2; i++) {
+    for (size_t i = 1; i <= new_str.length()-2; i++) {
         if (new_str[i] == ' ' || new_str[i] == '-') {
             new_str[i+1] = capchar(new_str[i+1]);
         }
@@ -327,7 +327,7 @@ inline std::string title(const std::string &str) {
 // Trandsforms a string to camel case (lower).
 inline std::string camel_case(const std::string &str) {
     std::string new_str = lowercase(str);
-    for (int i = 0; i <= new_str.length()-2; i++) {
+    for (size_t i = 0; i <= new_str.length()-2; i++) {
         if (new_str[i] == ' ') {
             new_str[i+1] = capchar(new_str[i+1]);
             new_str.erase(i, 1);
@@ -341,7 +341,7 @@ inline std::string camel_case(const std::string &str) {
 inline std::string pascal_case(const std::string &str) {
     std::string new_str = lowercase(str);
     new_str[0] = capchar(new_str[0]);
-    for (int i = 0; i <= new_str.length()-2; i++) {
+    for (size_t i = 0; i <= new_str.length()-2; i++) {
         if (new_str[i] == ' ') {
             new_str[i+1] = capchar(new_str[i+1]);
             new_str.erase(i, 1);
@@ -354,7 +354,7 @@ inline std::string pascal_case(const std::string &str) {
 // Transforms string to snake case
 inline std::string snake_case(const std::string &str) {
     std::string new_str = lowercase(str);
-    for (int i = 0; i <= new_str.length()-1; i++) {
+    for (size_t i = 0; i <= new_str.length()-1; i++) {
         if (new_str[i] == ' ') {
             new_str[i] = '_';
         }
@@ -365,7 +365,7 @@ inline std::string snake_case(const std::string &str) {
 // Transforms string to upper snake case aka screaming snake case
 inline std::string screaming_snake_case(const std::string &str) {
     std::string new_str = uppercase(str);
-    for (int i = 0; i <= new_str.length()-1; i++) {
+    for (size_t i = 0; i <= new_str.length()-1; i++) {
         if (new_str[i] == ' ') {
             new_str[i] = '_';
         }
@@ -376,7 +376,7 @@ inline std::string screaming_snake_case(const std::string &str) {
 // Tansforms a string to kebab case
 inline std::string kebab_case(const std::string &str) {
     std::string new_str = lowercase(str);
-    for (int i = 0; i <= new_str.length()-1; i++) {
+    for (size_t i = 0; i <= new_str.length()-1; i++) {
         if (new_str[i] == ' ') {
             new_str[i] = '-';
         }
@@ -387,7 +387,7 @@ inline std::string kebab_case(const std::string &str) {
 // Transforms a string to camel snake case
 inline std::string camel_snake_case(const std::string &str) {
     std::string new_str = lowercase(str);
-    for (int i = 0; i <= new_str.length()-2; i++) {
+    for (size_t i = 0; i <= new_str.length()-2; i++) {
         if (new_str[i] == ' ') {
             new_str[i] = '_';
             new_str[i+1] = capchar(new_str[i+1]);
@@ -432,7 +432,7 @@ inline int word_to_int(const std::string &str) {
 // Converts a vector of chars to a string.
 inline std::string vec_to_str(const std::vector<char> &chars) {
     std::string new_str;
-    for (int i = 0; i <= chars.size()-1; i++) {
+    for (size_t i = 0; i <= chars.size()-1; i++) {
         new_str += chars[i];
     }
     return new_str;
@@ -441,7 +441,7 @@ inline std::string vec_to_str(const std::vector<char> &chars) {
 // Returns a vector of each char of a string.
 inline std::vector<char> str_to_char_vec(const std::string &str) {
     std::vector<char> chars;
-    for (int i = 0; i <= str.length()-1; i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         chars.push_back(str[i]);
     }
     return chars;
@@ -450,9 +450,9 @@ inline std::vector<char> str_to_char_vec(const std::string &str) {
 // Return integer of # of vowels in a string.
 inline int count_vowels(const std::string &str) {
     int vowel_count = 0;
-    for (int i = 0; i <= str.length()-1; i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         // Checks for j is not greater than array index range
-        for (int j = 0; j <= 11; j++) {
+        for (size_t j = 0; j <= 11; j++) {
             constexpr std::array<char, 12> vowels = {
                 'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u', 'Y', 'y'
             };
@@ -467,9 +467,9 @@ inline int count_vowels(const std::string &str) {
 // Return a substring containing only the vowels of a given string.
 inline std::string extract_vowels(const std::string &str) {
     std::string new_str;
-    for (int i = 0; i <= str.size(); i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         // Checks for j is not greater than array index range
-        for (int j = 0; j <= 11; j++) {
+        for (size_t j = 0; j <= 11; j++) {
             constexpr std::array<char, 12> vowels = {
                 'A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u', 'Y', 'y'
             };
@@ -484,9 +484,9 @@ inline std::string extract_vowels(const std::string &str) {
 // Returns an integer of # special chars in a given string.
 inline int count_special_chars(const std::string &str) {
     int spec_char_count = 0;
-    for (int i = 0; i <= str.size(); i++) {
+    for (int i = 0; i <= str.length()-1; i++) {
         // Checks for j is not greater than array index range
-        for (int j = 0; j <= 29; j++) {
+        for (size_t j = 0; j <= 29; j++) {
             constexpr std::array<char, 30> special_chars = {
                 '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '{', '[', ']', '}',
                 '|', '.', ',', ';', ':', '<', '>', '/', '?', '`', '~', '"'
@@ -502,9 +502,9 @@ inline int count_special_chars(const std::string &str) {
 // Returns number of ints in a string
 inline int count_ints(const std::string &str) {
     int count = 0;
-    for (int i = 0; i <= str.size(); i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         // Checks for j is not greater than array index range
-        for (int j = 0; j <= 9; j++) {
+        for (size_t j = 0; j <= 9; j++) {
             constexpr std::array<char, 10> ints = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
             };
@@ -519,8 +519,8 @@ inline int count_ints(const std::string &str) {
 // Returns a substring with only the integers of a given string.
 inline std::string extract_ints(const std::string &str) {
     std::string new_str;
-    for (int i = 0; i <= str.size(); i++) {
-        for (int j = 0; j <= 9; j++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
+        for (size_t j = 0; j <= 9; j++) {
             constexpr std::array<char, 10> ints = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
             };
@@ -536,7 +536,7 @@ inline std::string extract_ints(const std::string &str) {
 inline int sum_ints_from_string(const std::string &str) {
     int sum = 0;
     const std::string temp = extract_ints(str);
-    for (int i = 0; i <= temp.size(); i++) {
+    for (size_t i = 0; i <= temp.size()-1; i++) {
         sum += char_to_int(temp[i]);
     }
     return sum;
@@ -567,7 +567,7 @@ inline std::string filter(const std::string &str, const bool condition) {
     if (str.empty()) {
         return new_str;
     }
-    for (int i = 0; i <= str.size()-1; i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         if (condition == true) {
             new_str += str[i];
         }
@@ -625,7 +625,7 @@ inline std::string replace_substring(const std::string &str, const std::string &
         return new_str;
     }
     // If a char matches first char of target, slice string at that point and compare substrings directly
-    for (int i = 0; i <= str.length()-1; i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         if (str[i] == target.front()) {
             std::string temp;
             temp = slice(str, i, i+target.length()-1);
@@ -647,7 +647,7 @@ inline void permute(const std::string &str, std::vector<std::string> &output, co
         return;
     }
     // Recursive loop calls function until iterator reaches string bounds.
-    for (int i = pos; i <= str.length()-1; i++) {
+    for (size_t i = pos; i <= str.length()-1; i++) {
         std::string new_str = rearrange(str, pos, i);
         permute(new_str, output, pos + 1);
     }
@@ -668,7 +668,7 @@ inline bool is_palindrome(const std::string &str) {
         return false;
     }
     const std::string reversed = lowercase(reverse(str));
-    for (int i = 0; i <= str.length()-1; i++) {
+    for (size_t i = 0; i <= str.length()-1; i++) {
         if (lowchar(str[i]) != reversed[i]) {
             return false;
         }
@@ -691,8 +691,8 @@ inline bool is_pangram(const std::string &str) {
     };
 
     // If char at index j matches letters element, set checks bool at index i to true.
-    for (int i = 0; i <= checks.size()-1; i++) {
-        for (int j = 0; j <= str.length()-1; j++) {
+    for (size_t i = 0; i <= checks.size()-1; i++) {
+        for (size_t j = 0; j <= str.length()-1; j++) {
             constexpr std::array<char, 26> letters = {
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
@@ -704,7 +704,7 @@ inline bool is_pangram(const std::string &str) {
     }
 
     // If any checks element is false, return false
-    for (int k = 0; k <= checks.size()-1; k++) {
+    for (size_t k = 0; k <= checks.size()-1; k++) {
         if (checks[k] == false) {
             return false;
         }
@@ -723,11 +723,14 @@ inline bool is_anagram(const std::string &str_1, const std::string &str_2) {
     if (str_1.length() == 1 || str_2.length() == 1) {
         return false;
     }
+
     std::vector<char> temp;
-    for (int i = 0; i <= str_1.length()-1; i++) {
+    temp.reserve(str_1.length());
+
+    for (size_t i = 0; i <= str_1.length()-1; i++) {
         temp.push_back(str_1[i]);
     }
-    for (int j = 0; j <= str_2.length()-1; j++) {
+    for (size_t j = 0; j <= str_2.length()-1; j++) {
         if (!contains(str_2, temp[j])) {
             return false;
         }
@@ -763,7 +766,7 @@ inline std::string mask_string(const std::string &str, const char censor='*') {
     }
     new_str = str;
     // Minus 5 here for index bounds plus last 4 chars restriction
-    for (int i = 0; i <= str.length()-5; i++) {
+    for (size_t i = 0; i <= str.length()-5; i++) {
         new_str[i] = censor;
     }
     return new_str;
@@ -783,14 +786,14 @@ inline std::string caesar_shift(const std::string &str, const int n) {
 
     constexpr int index_bounds = alphabet_upper.size()-1;
 
-    for (int i = 0; i <= new_str.length()-1; i++) {
+    for (size_t i = 0; i <= new_str.length()-1; i++) {
 
         if (char_is_upper(new_str[i])) {
 
             if ((i+n) <= index_bounds) {
                 new_str[i] = alphabet_upper[i+n];
             } else {
-                int overflow = (i + n) - index_bounds;
+                const int overflow = (i + n) - index_bounds;
                 new_str[i] = alphabet_upper[overflow];
             }
 
@@ -802,7 +805,7 @@ inline std::string caesar_shift(const std::string &str, const int n) {
             if ((i+n) <= index_bounds) {
                 new_str[i] = alphabet_lower[i+n];
             } else {
-                int overflow = (i + n) - index_bounds;
+                const int overflow = (i + n) - index_bounds;
                 new_str[i] = alphabet_lower[overflow];
             }
 

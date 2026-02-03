@@ -1,5 +1,6 @@
 #ifndef HELPERFUNCTIONS_NUM_FUNC_H
 #define HELPERFUNCTIONS_NUM_FUNC_H
+#include <functional>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -167,7 +168,7 @@ int maximum(const T &container) {
         return 0;
     }
     int max = container[0];
-    for (int i = 1; i <= container.size()-1; i++) {
+    for (size_t i = 1; i <= container.size()-1; i++) {
         if (container[i] > max) {
             max = container[i];
         }
@@ -182,7 +183,7 @@ int minimum(const T &container) {
         return 0;
     }
     int min = container[0];
-    for (int i = 1; i <= container.size()-1; i++) {
+    for (size_t i = 1; i <= container.size()-1; i++) {
         if (container[i] < min) {
             min = container[i];
         }
@@ -338,13 +339,84 @@ inline std::vector<int> sequence(const int n) {
     return sequenced_ints;
 }
 
-// Takes an integer, counts down from that integer until 0, exclusive. Returns a vector with those values as its elements.
+// Takes a positive value, counts down from that value until 0, exclusive. Returns a vector with those values as its elements.
 inline std::vector<int> reverse_sequence(const int n) {
     std::vector<int> sequenced_ints;
+    sequenced_ints.reserve(n);
     for (int i = n; i > 0; i--) {
         sequenced_ints.push_back(i);
     }
     return sequenced_ints;
 }
+
+// Returns the product of two 2d vectors
+template <typename T>
+std::vector<std::vector<T>> matrix_product(const std::vector<std::vector<T>> &vec_1, const std::vector<std::vector<T>> & vec_2) {
+    std::vector<std::vector<T>> matrix;
+    if (vec_1.empty() || vec_2.empty()) {
+        return matrix;
+    }
+    matrix.resize(vec_1.size());
+    for (size_t i = 0; i <= vec_1.size()-1; i++) {
+        for (size_t j = 0; j <= vec_2.size()-1; j++) {
+            matrix[i][j] = vec_1[i][j] * vec_2[i][j];
+        }
+    }
+    return matrix;
+}
+
+// Allows you to repeatedly run a value through a single-parameter function for n number of iterations.
+template <typename T>
+void pass_value_for(T value, std::function<T(T)> func, int n) {
+    if (n < 0) {
+        n = 1;
+    }
+    for (; n > 0; n--) {
+        value = func(value);
+    }
+}
+
+// Returns a map of a function's input (key) and output (value), up to a given value
+template <typename T>
+std::map<T, T> io_map(std::function<T(T)> func, T upper_bound, const T lower_bound=0, const T interval=1) {
+    T input = lower_bound;
+    T output;
+    std::map<T, T> new_map;
+    for (; input <= upper_bound; input += interval) {
+        output = func(input);
+        new_map[input] = output;
+    }
+    return new_map;
+}
+
+// Returns a pair of a function's input and output given an input
+template <typename T>
+std::pair<T, T> io_at(const T input, std::function<T(T)> func) {
+    T output = func(input);
+    std::pair<T, T> io_pair(input, output);
+    return io_pair;
+}
+
+// Returns the "equal-ness" ratio of two comparable containers
+template <typename T>
+double eq_ratio(const T &container_1, const T &container_2) {
+    const size_t larger = greater(container_1.size(), container_2.size());
+    double equal_elements_count = 0;
+    for (size_t i = 0; i <= container_1.size()-1; i++) {
+        for (size_t j = 0; j <= container_2.size()-1; j++) {
+            if (container_1[i] == container_2[j]) {
+                equal_elements_count++;
+            }
+        }
+    }
+    return equal_elements_count / larger;
+}
+
+// Returns true if a value is between two other values.
+template <typename T>
+bool within_bounds(const T target, const T lower_bound, const T upper_bound) {
+    return target >= lower_bound && target <= upper_bound;
+}
+
 
 #endif //HELPERFUNCTIONS_NUM_FUNC_H

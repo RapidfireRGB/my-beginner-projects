@@ -343,26 +343,46 @@ T count_of(const T *array, const size_t size, const T element) {
     return count;
 }
 
-// Returns an array between two index bounds
+// Sums elements between two index positions, inclusive.
 template <typename T>
-T* slice(const T *array, const size_t size, size_t pos_1, size_t pos_2) {
-
-    // Bounds checking
-    if (pos_1 < pos_2) {
+T sum_between(const T *array, const size_t size, size_t pos_1, size_t pos_2) {
+    if (size == 0) {
+        return 0;
+    }
+    if (pos_1 > pos_2) {
         pos_1 = pos_2-1;
     }
     if (pos_2 > size-1) {
         pos_2 = size-1;
     }
 
-    // Heap allocates array with size equal to index bounds plus 1
-    T* new_array = new T[pos_2+1];
+    T sum = 0;
 
     for (size_t i = pos_1; i <= pos_2; i++) {
-        new_array[i-pos_1] = array[i];
-
+        sum += array[i];
     }
-    return new_array;
+
+    return sum;
+}
+
+// Averages elements between two index bounds, inclusive.
+template <typename T>
+T avg_between(const T *array, const size_t size, size_t pos_1, size_t pos_2) {
+    if (size == 0) {
+        return 0;
+    }
+    if (pos_1 > pos_2) {
+        pos_1 = pos_2-1;
+    }
+    if (pos_2 > size-1) {
+        pos_2 = size-1;
+    }
+    T sum = 0;
+    T range = pos_2 - pos_1;
+    for (size_t i = pos_1; i <= pos_2; i++) {
+        sum += array[i];
+    }
+    return sum / range;
 }
 
 #endif //HELPERFUNCTIONS_ARRAY_FUNC_H

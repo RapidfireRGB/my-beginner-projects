@@ -3,6 +3,7 @@
 #include <utility>
 #include <tuple>
 #include <map>
+#include <functional>
 
 // Returns a new pair with first and second elements exchanged.
 template <typename T1, typename T2>
@@ -89,10 +90,51 @@ std::tuple<T1, T2> pair_to_tuple(const std::pair<T1, T2> &pair) {
     return new_tuple;
 }
 
+// Sorts a pair in descending order
+template <typename T>
+void sort_desc(std::pair<T, T> pair) {
+    if (pair.first < pair.second) {
+        std::swap(pair.first, pair.second);
+    }
+}
+
+// Sorts a pair in ascending order
+template <typename T>
+void sort_asc(std::pair<T, T> pair) {
+    if (pair.first > pair.second) {
+        std::swap(pair.first, pair.second);
+    }
+}
+
 // Inserts a pair's elements into a map.
-template <typename T1, typename T2, typename K, typename V>
-void add_to_map(const std::pair<T1, T2> &pair, std::map<K, V> map) {
+template <typename T1, typename T2>
+void add_to_map(const std::pair<T1, T2> &pair, std::map<T1, T2> map) {
     map.insert(pair.first, pair.second);
 }
+
+// Make a pair from a function's input and output
+template <typename T1, typename T2>
+std::pair<T1, T2> io_pair(std::function<T2(T1)> func, T1 input) {
+    std::pair<T1, T2> new_pair(input, func(input));
+    return new_pair;
+}
+
+// Returns the percent change between a pair's elements.
+template <typename T>
+T percent_change(const std::pair<T, T> &pair) {
+    if (pair.second == 0) {
+        return 0;
+    }
+    T result = (pair.first - pair.second)/pair.second * 100;
+    return result;
+}
+
+// Applies a transformation function to both elements of a pair.
+template <typename T1, typename T2, typename T3>
+void transform_pair(std::pair<T1, T2> pair, std::function<T3(T1, T2)> func) {
+    func(pair.first, pair.second);
+}
+
+
 
 #endif //HELPERFUNCTIONS_PAIR_FUNC_H

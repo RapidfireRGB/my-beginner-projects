@@ -101,7 +101,7 @@ inline int count_trues(std::vector<bool> booleans) {
         return 0;
     }
     int count = 0;
-    for (int i = 0; i <= booleans.size()-1; i++) {
+    for (size_t i = 0; i <= booleans.size()-1; i++) {
         if (booleans[i] == true) {
             count++;
         }
@@ -115,7 +115,7 @@ inline int count_falses(std::vector<bool> booleans) {
         return 0;
     }
     int count = 0;
-    for (int i = 0; i <= booleans.size()-1; i++) {
+    for (size_t i = 0; i <= booleans.size()-1; i++) {
         if (booleans[i] == false) {
             count++;
         }
@@ -220,7 +220,7 @@ inline int first_true(std::vector<bool> booleans) {
     if (booleans.empty()) {
         return 0;
     }
-    for (int i = 0; i <= booleans.size()-1; i++) {
+    for (size_t i = 0; i <= booleans.size()-1; i++) {
         if (booleans[i] == true) {
             return i;
         }
@@ -233,7 +233,7 @@ inline int first_false(std::vector<bool> booleans) {
     if (booleans.empty()) {
         return 0;
     }
-    for (int i = 0; i <= booleans.size()-1; i++) {
+    for (size_t i = 0; i <= booleans.size()-1; i++) {
         if (booleans[i] == false) {
             return i;
         }
@@ -246,7 +246,7 @@ inline int last_true(std::vector<bool> booleans) {
     if (booleans.empty()) {
         return 0;
     }
-    for (int i = booleans.size()-1; i >= 0; i--) {
+    for (size_t i = booleans.size()-1; i > 0; i--) {
         if (booleans[i] == true) {
             return i;
         }
@@ -259,7 +259,7 @@ inline int last_false(std::vector<bool> booleans) {
     if (booleans.empty()) {
         return 0;
     }
-    for (int i = booleans.size()-1; i >= 0; i--) {
+    for (size_t i = booleans.size()-1; i > 0; i--) {
         if (booleans[i] == false) {
             return i;
         }
@@ -272,7 +272,7 @@ inline void set_true(std::vector<bool> booleans) {
     if (booleans.empty()) {
         return;
     }
-    for (int i = 0; i <= booleans.size()-1; i++) {
+    for (size_t i = 0; i <= booleans.size()-1; i++) {
         booleans[i] = true;
     }
 }
@@ -282,7 +282,7 @@ inline void set_false(std::vector<bool> booleans) {
     if (booleans.empty()) {
         return;
     }
-    for (int i = 0; i <= booleans.size()-1; i++) {
+    for (size_t i = 0; i <= booleans.size()-1; i++) {
         booleans[i] = false;
     }
 }
@@ -292,7 +292,7 @@ inline void flip_all(std::vector<bool> booleans) {
     if (booleans.empty()) {
         return;
     }
-    for (int i = 0; i <= booleans.size()-1; i++) {
+    for (size_t i = 0; i <= booleans.size()-1; i++) {
         if (booleans[i] == true) {
             booleans[i] = false;
         } else if (booleans[i] == false) {
@@ -313,7 +313,7 @@ inline void flip_range(std::vector<bool> booleans, int pos_1=0, int pos_2=3) {
     if (pos_2 > booleans.size()-1) {
         pos_2 = booleans.size()-1;
     }
-    for (int i = pos_1; i <= pos_2; i++) {
+    for (size_t i = pos_1; i <= pos_2; i++) {
         if (booleans[i] == true) {
             booleans[i] = false;
         } else if (booleans[i] == false) {
@@ -327,7 +327,7 @@ inline void assign_all(std::vector<bool> booleans, const bool value) {
     if (booleans.empty()) {
         return;
     }
-    for (int i = 0; i <= booleans.size()-1; i++) {
+    for (size_t i = 0; i <= booleans.size()-1; i++) {
         booleans[i] = value;
     }
 }
@@ -344,7 +344,7 @@ inline void assign_range(std::vector<bool> booleans, const bool value, int pos_1
     if (pos_2 > booleans.size()-1) {
         pos_2 = booleans.size()-1;
     }
-    for (int i = pos_1; i <= pos_2; i++) {
+    for (size_t i = pos_1; i <= pos_2; i++) {
         if (booleans[i] != value) {
             booleans[i] = value;
         }
